@@ -1,0 +1,156 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+        <title>The Clones</title>
+        <meta name="author" content="Jacob Guglielmin">
+		<link href="css/main.css" rel="stylesheet">
+	</head>
+	<body class="no-select"> 
+        <div id="tooltip" class="hidden">
+            <p id="tooltipTitle"></p>
+            <hr>
+            <span id="tooltipInfo"></span>
+            <hr>
+            <span id="tooltipCost"></span>
+        </div>
+        <div id="header">
+            <!-- Settings buttons are displayed right to left on the right side of the window -->
+            <button id="save" class="settingsButton" onmousedown="save('localStorage')">Save</button>
+            <button id="export" class="settingsButton" onmousedown="tooltip('save')">Export</button>
+            <button id="import" class="settingsButton" onmousedown="tooltip('load')">Import</button>
+        </div>
+        <div id="home">
+            <div id="left">
+                <div id="resourcesContainer">
+                    <table id="searchTable">
+                        <tbody>
+                            <tr id="searchContainer">
+                                <td>
+                                    <button onmousedown="search()">Search the Room</button>
+                                    <div class="progressBarOuter">
+                                        <div id="searchProgressBar" class="progressBarInner" style="width:0%;"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!-- <h3>Resources</h3> -->
+                    <!-- <table id="resourcesTable">
+                        <tbody>
+                            <tr id="foodContainer">
+                                <td>
+                                    <button onmousedown="increment('food')">Gather Food</button>
+                                </td>
+                                <td>Food: </td>
+                                <td class="number">
+                                    <span id="food">0</span>
+                                </td>
+                                <td class="number">
+                                    Max Storage: 
+                                    <span id="foodMax">200</span>
+                                </td>
+                                <td id="foodNetContainer" class="number hidden">
+                                    <span id="foodNet">0.0</span>/s
+                                </td>
+                            </tr>
+                            <tr id="woodContainer" class="hidden">
+                                <td>
+                                    <button onmousedown="increment('wood')">Chop Wood</button>
+                                </td>
+                                <td>Wood: </td>
+                                <td class="number">
+                                    <span id="wood">0</span>
+                                </td>
+                                <td class="number">
+                                    Max Storage: 
+                                    <span id="woodMax">200</span>
+                                </td>
+                                <td id="woodNetContainer" class="number hidden">
+                                    <span id="woodNet">0.0</span>/s
+                                </td>
+                            </tr>
+                            <tr id="metalContainer" class="hidden">
+                                <td>
+                                    <button onmousedown="increment('metal')">Gather Food</button>
+                                </td>
+                                <td>Metal: </td>
+                                <td class="number">
+                                    <span id="metal">0</span>
+                                </td>
+                                <td class="number">
+                                    Max Storage: 
+                                    <span id="metalMax">200</span>
+                                </td>
+                                <td class="number">
+                                    <span id="metalNet">0.0</span>/s
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table> -->
+                </div>
+                <div id="purchaseContainer" class="hidden">
+                    <div id="purchaseTabs" class="tabs">
+                        <button id="buildingsButton" class="tabButton currentTab" onmousedown="switchTabs(0, 0)">Buildings</button>
+                        <button id="upgradesButton" class="tabButton hidden" onmousedown="switchTabs(1, 0)">Upgrades</button>
+                    </div>
+                    <div id="buildings">
+                        <button id="hutButton" class="purchase" onmouseover="tooltip('hut', event)" onmousemove="tooltip('hut', event)" onmouseout="tooltip('hide')" onmousedown="build('hut', 1)">Build Hut<br>0</button>
+                        <button id="houseButton" class="purchase hidden" onmouseover="tooltip('house', event)" onmousemove="tooltip('house', event)" onmouseout="tooltip('hide')" onmousedown="build('house', 1)">Build House<br>0</button>
+                        <button id="mansionButton" class="purchase hidden" onmouseover="tooltip('mansion', event)" onmousemove="tooltip('mansion', event)" onmouseout="tooltip('hide')" onmousedown="build('mansion', 1)">Build Mansion<br>0</button>
+                    </div>
+                    <div id="upgrades" class="hidden">
+                        <button id="philosophyButton" class="purchase" onmouseover="tooltip('philosophy', event)" onmousemove="tooltip('philosophy', event)" onmouseout="tooltip('hide')" onmousedown="purchase('philosophy')">Philosophy</button>
+                        <button id="miningButton" class="purchase hidden" onmouseover="tooltip('mining', event)" onmousemove="tooltip('mining', event)" onmouseout="tooltip('hide')" onmousedown="purchase('mining')">Mining</button>
+                    </div>
+                </div>
+            </div>
+            <div id="right">
+                <div id="story"></div>
+                <div id="workersContainer" class="hidden">
+                    <div id="workersTabs" class="tabs">
+                        <button id="citizensButton" class="tabButton currentTab" onmousedown="switchTabs(0, 1)">Citizens</button>
+                        <button id="jobsButton" class="tabButton hidden" onmousedown="switchTabs(1, 1)">Jobs</button>
+                        <button id="equipmentButton" class="tabButton hidden" onmousedown="switchTabs(2, 1)">Equipment</button>
+                    </div>
+                    <table id="citizens">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    Total Population: 
+                                </td>
+                                <td>
+                                    <span id="totalPopulation">0</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Max Population: 
+                                </td>
+                                <td>
+                                    <span id="maxPopulation">0</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div id="jobs" class="hidden">
+                        <div id="workerManagementContainer">
+                            Unemployed Workers: 
+                            <span id="unemployed">0</span>
+                        </div>
+                        <br>
+                        <button id="farmerButton" class="purchase" onmouseover="tooltip('farmer', event)" onmousemove="tooltip('farmer', event)" onmouseout="tooltip('hide')" onmousedown="hire('farmer', 1)">Farmer<br>0</button>
+                        <button id="lumberjackButton" class="purchase hidden" onmouseover="tooltip('lumberjack', event)" onmousemove="tooltip('lumberjack', event)" onmouseout="tooltip('hide')" onmousedown="hire('lumberjack', 1)">Lumberjack<br>0</button>
+                        <button id="minerButton" class="purchase hidden" onmouseover="tooltip('miner', event)" onmousemove="tooltip('miner', event)" onmouseout="tooltip('hide')" onmousedown="hire('miner', 1)">Miner<br>0</button>
+                        <button id="philosopherButton" class="purchase hidden" onmouseover="tooltip('philosopher', event)" onmousemove="tooltip('philosopher', event)" onmouseout="tooltip('hide')" onmousedown="hire('philosopher', 1)">Philosopher<br>0</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="js/lz-string.js"></script>
+        <script src="js/tooltip.js"></script>
+        <script src="js/conquest.js"></script>
+        <script src="js/imp-exp.js"></script>
+        <script src="js/main.js"></script>
+	</body>
+</html>
