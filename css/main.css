@@ -14,7 +14,7 @@ body {
 }
 
 button {
-    width: 150px;
+    width: 200px;
     height: 30px;
     background-color: #272823;
     border: 1px solid #EEE;
@@ -82,25 +82,6 @@ h3 {
     width: 45.5vw;
 }
 
-#purchaseContainer {
-    position: relative;
-    left: 3vw;
-    top: 13.27vh;
-    width: 45.5vw;
-    height: 49.55vh;
-    border: 1px solid #EEE;
-    background-color: #35372F;
-    padding: 0;
-    margin: 0;
-}
-
-#buildings {
-    width: 45.5vw;
-    height: 43.55vh;
-    overflow-y: scroll;
-    overflow-x: hidden;
-}
-
 #right {
     top: 10vh;
     width: 50vw;
@@ -119,76 +100,6 @@ h3 {
     padding: 10px;
     font-size: 2.5vh;
     overflow-y: auto;
-}
-
-#workersContainer {
-    position: relative;
-    left: 1.5vw;
-    top: 10vh;
-    width: 45.5vw;
-    height: 39vh;
-    border: 1px solid #EEE;
-    background-color: #35372F;
-    padding: 0;
-    margin: 0;
-}
-
-#citizens {
-    margin: 10px;
-    text-align: left;
-    font-size: 2.9vh;
-}
-
-#jobs {
-    font-size: 2.5vh;
-    height: 33vh;
-    padding: 0;
-    margin: 0;
-    overflow-y: scroll;
-    overflow-x: hidden;
-}
-
-#workerManagementContainer {
-    margin: 10px;
-    margin-bottom: -20px;
-    width: 45.5vw;
-}
-
-#mapContainer {
-    border: 1px solid #EEE;
-    font-family: sansMonospace;
-    font-size: 2.5vh;
-    width: 30.7em;
-    height: 30.7em;
-    letter-spacing: 0.42em;
-    line-height: 1.02em;
-    padding: 0.2em;
-    padding-left: 0.4em;
-}
-
-.specialResource {
-    border: 1px solid #EEE;
-    width: 5.5vw;
-    height: 5.5vw;
-    margin-top: 1em;
-    text-align: center;
-    padding-top: 1vh;
-    float: right;
-}
-
-.specialResourceTitle {
-    display: inline-block;
-    font-weight: bold;
-}
-
-.specialResourceTotal {
-    display: inline-block;
-    margin: 1vh;
-    vertical-align: middle;
-}
-
-.specialResourceNet {
-    display: inline-block;
 }
 
 .headerButton {
@@ -214,52 +125,8 @@ h3 {
     border: none;
 }
 
-.disabled {
-    border: 1px solid #737373 !important;
-    color: #737373 !important;
-    cursor: default !important;
-}
-
 .hidden {
     display: none;
-}
-
-.tabs {
-    position: relative;
-    left: 0px;
-    top: 0px;
-    width: 45.5vw;
-    height: 6vh;
-    background-color: #272823;
-}
-
-.purchaseRow {
-    width: 100%;
-}
-
-.purchase {
-    position: relative;
-    width: 13.25vw;
-    height: 10vh;
-    font-size: 2.5vh;
-    line-height: 3.75vh;
-    margin-left: 1.1vw;
-    margin-top: 20px;
-    margin-right: 0px;
-    float: left;
-}
-
-.tabButton {
-    position: relative;
-    width: 50%;
-    height: inherit;
-    float: left;
-    margin-right: 0;
-    border: 1px solid #EEE !important;
-}
-
-.currentTab {
-    background-color: #35372F !important;
 }
 
 .number {
@@ -267,40 +134,20 @@ h3 {
     padding-right: 20px;
 }
 
-.knowledge {
-    color: #90F;
-}
-
-.grass {
-    color: #2B0;
-}
-
-.field {
-    color: #FC8;
-}
-
-.path {
-    color: #BBB;
-}
-
-.army {
-    color: #FF0;
-}
-
-.healthBarOuter {
+.progressBarOuter {
     width: 25vw;
     height: 4vh;
     border-radius: 1vh;
     background-color: #BBB;
 }
 
-.healthBarInner {
+.progressBarInner {
     height: inherit;
     border-top-left-radius: 1vh;
     border-bottom-left-radius: 1vh;
     border-right: 2px solid #000;
     background-color: #2B0;
-    transition: width 0.6s ease;
+    transition: width 0.2s ease;
 }
 
 .no-select {
