@@ -64,6 +64,8 @@
                         <button id="upgradesButton" class="tabButton hidden" onmousedown="switchTabs(1, 1)">Upgrades</button>
                     </div>
                     <div id="buildings">
+                        <button id="generatorButton" class="purchase" onmouseover="tooltip('generator', event)" onmousemove="tooltip('generator', event)" onmouseout="tooltip('hide')" onmousedown="build('generator', 1)">Generator</button>
+                        <button id="spearButton" class="purchase hidden" onmouseover="tooltip('spear', event)" onmousemove="tooltip('spear', event)" onmouseout="tooltip('hide')" onmousedown="build('spear', 1)">Spear</button>
                         <button id="crateButton" class="purchase hidden" onmouseover="tooltip('crate', event)" onmousemove="tooltip('crate', event)" onmouseout="tooltip('hide')" onmousedown="build('crate', 1)">Crate<br>0</button>
                     </div>
                     <div id="upgrades" class="hidden"></div>
