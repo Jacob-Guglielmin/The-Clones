@@ -26,11 +26,6 @@ function resetVariables() {
             counter: 0,
             waiting: false
         },
-        research: {
-            time: 0,
-            counter: 0,
-            researching: 0
-        },
         cloning: {
             required: 15,
             counter: 0,
@@ -59,7 +54,7 @@ function resetVariables() {
             increment: 1
         }
     },
-    buildings = {
+    purchases = {
         generator: {
             owned: 0,
             benefitType: "story",
@@ -91,13 +86,29 @@ function resetVariables() {
             tooltip: {
                 info: "Well, you can't really call it a spear. More like a pointy club, really, but it'll do."
             }
+        },
+        escape: {
+            owned: 0,
+            benefitType: "story",
+            requires: {
+                science: 150
+            },
+            tooltip: {
+                info: "Come up with something that could open the door with nothing but what you find in the room."
+            }
+        },
+        explosive: {
+            owned: 0,
+            benefitType: "story",
+            requires: {
+                metal: 50,
+                science: 100
+            },
+            tooltip: {
+                info: "A small explosive device made from chemicals you were able to find in some machines. It shouldn't do much damage to anything it isn't next to."
+            }
         }
     },
-    upgrades = {
-
-    },
-
-    //TODO Add a power generator job to automate power
     clones = {
         total: 0,
         unemployed: 0,
@@ -143,7 +154,10 @@ var STORY = [
     /* 17 */"Whatever came from the chamber just woke up. It stands up, looks around, and sees you. It looks frightened. You tell it your name, and it hesitantly replies that it thought that was its name too. At least that clears up one thing. However it happened, there is now two of you stuck in this room. In other news, the generator system seems like it works.",
     /* 18 */"Talking to the Clone, you find out that it doesn't have all your memories. After explaining your situation to it, it says that it would happily help you.",
     /* 19 */"After being busy examining wire pathways with you, the Clone tells you that the machine in the middle of the room seems to be connected in a lot of ways to the machine the Clone came out of. They suggest that maybe when you got into the tube, it may have activated the machines that created the Clone. Getting in again would give you a better idea of whether that is the case.",
-    /* 20 */"You step into the machine again and close the door. After waiting a few minutes, you hear a whirring sound from the roof. It continues for about 30 seconds, and then it stops again. You step out of the machine, and the Clone examines the machine it came out of. It seems to have been activated again. Looks like there'll be three of you in a while. As long as you still have power, you should be able to make as many Clones as you need."
+    /* 20 */"You step into the machine again and close the door. After waiting a few minutes, you hear a whirring sound from the roof. It continues for about 30 seconds, and then it stops again. You step out of the machine, and the Clone examines the machine it came out of. It seems to have been activated again. Looks like there'll be three of you in a while. As long as you still have power, you should be able to make as many Clones as you need.",
+    /* 21 */"With this many Clones, you are going to run out of food a lot sooner than you had expected. You all decide that if you're going to make it out of here, you'll need to spend most of your time looking for a way out.",
+    /* 22 */"You've been looking at some of the machines in the room, and one of the Clones thinks that you could make a small explosive that you could detonate next to the door to dislodge it.",
+    /* 23 */"With your explosive armed, you all hide behind machines and detonate it. After everything has settled, you go over to the door and open it up. You look at where you are, but all that is outside of the room is forests and mountains. Looking at the outside of the building, you see that there should be more to the building, but the whole planet is absent of buildings and technology, except for your little room. It doesn't look like you're just going to be able to ask someone where you are."
 ],
 HINTS = [
     /* 0 */"After getting a bunch of scrap metal, you realize that you don't have a lot of space to put it. If you built a storage crate, you could keep some more."
@@ -159,7 +173,7 @@ function init() {
     addStory(0);
     load("localStorage");
     updateResourceValues();
-    updateBuildingValues();
+    updatePurchaseValues();
     updateCloneValues();
     setInterval(() => {
         tick();
@@ -186,16 +200,6 @@ function tick() {
         resources[resource].total = Math.floor(resources[resource].dTotal);
         if (!revealed.cloning && resource == "science" && resources[resource].total >= 100) {
             reveal(5);
-        }
-    }
-
-    //Increment the research timer if we are researching something
-    if (trackers.research.time != 0) {
-        trackers.research.counter++;
-        if (trackers.research.counter >= (trackers.research.time*10)) {
-            trackers.research.time = 0;
-            trackers.research.counter = 0;
-            research();
         }
     }
 
@@ -248,28 +252,28 @@ function calculateNetResources() {
 }
 
 /**
- * Updates the values of all of the buildings in the HTML
+ * Updates the values of all of the purchases in the HTML
  */
-function updateBuildingValues() {
+function updatePurchaseValues() {
 
-    //Iterate through all buildings
-    for (building in buildings) {
+    //Iterate through all purchases
+    for (item in purchases) {
         //Update button text
-        document.getElementById(building + "Button").innerHTML = building.charAt(0).toUpperCase() + building.slice(1) + "<br>" + buildings[building].owned;
+        document.getElementById(item + "Button").innerHTML = item.charAt(0).toUpperCase() + item.slice(1) + "<br>" + purchases[item].owned;
         
         //Iterate through required resources and check each one
         let enabled = true;
-        for (resource in buildings[building].requires) {
-            if (resources[resource].total < buildings[building].requires[resource]) {
+        for (resource in purchases[item].requires) {
+            if (resources[resource].total < purchases[item].requires[resource]) {
                 enabled = false;
             }
         }
 
         //Disable or enable button
         if (enabled) {
-            document.getElementById(building + "Button").classList.remove("disabled");
+            document.getElementById(item + "Button").classList.remove("disabled");
         } else {
-            document.getElementById(building + "Button").classList.add("disabled");
+            document.getElementById(item + "Button").classList.add("disabled");
         }
     }
 
@@ -326,7 +330,7 @@ function incrementResource(resource) {
             reveal(5);
         }
         updateResourceValues();
-        updateBuildingValues();
+        updatePurchaseValues();
         updateCloneValues();
     }
 }
@@ -350,6 +354,9 @@ function makeClone() {
                 clones.unemployed++;
                 updateCloneValues();
                 trackers.cloning.canClone = true;
+                if (clones.total == 5) {
+                    reveal(6);
+                }
             }, 200);
         }
     }
@@ -516,17 +523,6 @@ function changeAction(actionText) {
 }
 
 /**
- * Handles completed research tasks
- */
-function research() {
-    switch (trackers.research.researching) {
-
-        default:
-            break;
-    }
-}
-
-/**
  * Shows a new part of the UI
  * 
  * @param revealing what to reveal
@@ -566,12 +562,16 @@ function reveal(revealing) {
             document.getElementById("actionButton").disabled = false;
             revealed.cloning = true;
             break;
+
+        case 6:
+            addStory(21);
+            document.getElementById("upgradesButton").classList.remove("hidden");
     
         default:
             break;
     }
     updateResourceValues();
-    updateBuildingValues();
+    updatePurchaseValues();
 }
 
 /**
@@ -587,36 +587,39 @@ function random(min, max) {
 }
 
 /**
- * Creates a building and consumes the required resources
+ * Purchases an upgrade or building and consumes the required resources
  * 
- * @param building the building to purchase
+ * @param item the thing to purchase
  * @param amount how many to purchase
  */
-function build(building, amount) {
-    let canBuild = true;
+function purchase(item, amount) {
 
-    for (const resource in buildings[building].requires) {
-        if (buildings[building].requires[resource]*amount > resources[resource].total) {
-            canBuild = false;
+    amount = amount || 1;
+
+    let canPurchase = true;
+
+    for (const resource in purchases[item].requires) {
+        if (purchases[item].requires[resource]*amount > resources[resource].total) {
+            canPurchase = false;
         }
     }
 
-    if (canBuild) {
+    if (canPurchase) {
 
-        for (const resource in buildings[building].requires) {
-            resources[resource].total -= buildings[building].requires[resource];
-            resources[resource].dTotal -= buildings[building].requires[resource];
-            buildings[building].requires[resource] = Math.floor(buildings[building].requires[resource] * 1.2);
+        for (const resource in purchases[item].requires) {
+            resources[resource].total -= purchases[item].requires[resource];
+            resources[resource].dTotal -= purchases[item].requires[resource];
+            purchases[item].requires[resource] = Math.floor(purchases[item].requires[resource] * 1.2);
         }
 
-        if (buildings[building].benefitType.includes("storage")) {
-            if (buildings[building].benefitType.includes("metal")) {
-                resources.metal.max += buildings[building].benefit;
+        if (purchases[item].benefitType.includes("storage")) {
+            if (purchases[item].benefitType.includes("metal")) {
+                resources.metal.max += purchases[item].benefit;
             }
         }
 
-        if (buildings[building].benefitType.includes("story")) {
-            switch (building) {
+        if (purchases[item].benefitType.includes("story")) {
+            switch (item) {
                 case "generator":
                     addStory(14);
                     changeAction("Open the Chamber");
@@ -630,14 +633,25 @@ function build(building, amount) {
                     document.getElementById("actionButton").disabled = false;
                     document.getElementById("spearButton").classList.add("hidden");
                     break;
+
+                case "escape":
+                    addStory(22);
+                    document.getElementById("escapeButton").classList.add("hidden");
+                    document.getElementById("explosiveButton").classList.remove("hidden");
+                    break;
+
+                case "explosive":
+                    addStory(23);
+                    document.getElementById("explosiveButton").classList.add("hidden");
+                    break;
             
                 default:
                     break;
             }            
         }
 
-        buildings[building].owned += amount;
-        updateBuildingValues();
+        purchases[item].owned += amount;
+        updatePurchaseValues();
         updateResourceValues();
         updateTooltip();
     }
@@ -669,6 +683,30 @@ function hire(job, amount) {
             calculateNetResources();
             updateResourceValues();
             updateCloneValues();
+        }
+    }
+}
+
+/**
+ * Toggles between tabs
+ * 
+ * @param tab the tab to switch to
+ * @param container the container that is being switched
+ */
+function switchTabs(tab, container) {
+    if (container == 0) {
+
+    } else {
+        if (tab == 0) {
+            document.getElementById("upgrades").classList.add("hidden");
+            document.getElementById("upgradesButton").classList.remove("currentTab");
+            document.getElementById("buildings").classList.remove("hidden");
+            document.getElementById("buildingsButton").classList.add("currentTab");
+        } else {
+            document.getElementById("buildings").classList.add("hidden");
+            document.getElementById("buildingsButton").classList.remove("currentTab");
+            document.getElementById("upgrades").classList.remove("hidden");
+            document.getElementById("upgradesButton").classList.add("currentTab");
         }
     }
 }
