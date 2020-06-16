@@ -68,6 +68,7 @@ function resetVariables() {
                 metal: 50
             }
         },
+        //TODO Add a food storage
         crate: {
             owned: 0,
             benefit: 50,
@@ -118,13 +119,13 @@ function resetVariables() {
             }
         }
     },
-    //TODO Set up saving
     revealed = {
         //Story-based
         metal: false,
+        hideGenerator: false,
         spear: false,
+        hideSpear: false,
         science: false,
-        power: false,
         cloning: false,
         upgrades: false,
         explosive: false,
@@ -199,13 +200,19 @@ TOOLTIPS = {
 
 storyDisplayed = "",
 
-autoSaveCounter = 0
+autoSaveCounter = 0,
+
+startTask = null;
 
 /**
  * Initializes the game
  */
 function init() {
     addStory(0);
+    startTask = setTimeout(() => {
+        addStory(1);
+        document.getElementById("actionContainer").classList.remove("hidden");
+    }, 3000);
     load("localStorage");
     updateResourceValues();
     updatePurchaseValues();
@@ -213,10 +220,6 @@ function init() {
     setInterval(() => {
         tick();
     }, 100);
-    setTimeout(() => {
-        addStory(1);
-        document.getElementById("actionContainer").classList.remove("hidden");
-    }, 3000);
 }
 
 
@@ -233,7 +236,7 @@ function tick() {
             resources[resource].dTotal = resources[resource].max;
         }
         resources[resource].total = Math.floor(resources[resource].dTotal);
-        if (!revealed.cloning && resource == "science" && resources[resource].total >= 100) {
+        if (!revealed.cloningStory && resource == "science" && resources[resource].total >= 100) {
             reveal(5);
         }
     }
@@ -241,7 +244,7 @@ function tick() {
     //If we are waiting for something, wait for it
     if (trackers.wait.time != 0 && trackers.wait.waiting) {
         trackers.wait.counter++;
-        document.getElementById("actionProgressBar").style.width = (trackers.wait.counter/(trackers.wait.time*10)*100) + "%";
+        document.getElementById("actionProgressBar").style.width = (Math.floor(trackers.wait.counter/(trackers.wait.time*10)*100)) + "%";
         if (trackers.wait.counter >= (trackers.wait.time*10)) {
             trackers.wait.time = 0;
             trackers.wait.counter = 0;
@@ -554,7 +557,7 @@ function changeAction(actionText) {
     if (actionText != "") {
         document.getElementById("actionButton").innerHTML = actionText;
     } else {
-        document.getElementById("actionButton").innerHTML = "‏‏‎ ‎";
+        document.getElementById("actionButton").innerHTML = "‏‏‎⠀";
     }
 }
 
@@ -593,14 +596,14 @@ function reveal(revealing) {
             document.getElementById("cloningContainer").classList.remove("hidden");
             document.getElementById("powerContainer").classList.remove("hidden");
             document.getElementById("actionTable").classList.add("hidden");
-            revealed.power = true;
+            revealed.cloning = true;
             break;
 
         case 5:
             addStory(19);
             changeAction("Activate the Machine");
             document.getElementById("actionButton").disabled = false;
-            revealed.cloning = true;
+            revealed.cloningStory = true;
             break;
 
         case 6:
@@ -666,6 +669,7 @@ function purchase(item, amount) {
                     changeAction("Open the Chamber");
                     document.getElementById("actionButton").disabled = false;
                     document.getElementById("generatorButton").classList.add("hidden");
+                    revealed.hideGenerator = true;
                     break;
 
                 case "spear":
@@ -673,6 +677,7 @@ function purchase(item, amount) {
                     changeAction("Install the Generator");
                     document.getElementById("actionButton").disabled = false;
                     document.getElementById("spearButton").classList.add("hidden");
+                    revealed.hideSpear = true;
                     break;
 
                 case "escape":
@@ -728,6 +733,7 @@ function hire(job, amount) {
             calculateNetResources();
             updateResourceValues();
             updateCloneValues();
+
         }
     }
 }

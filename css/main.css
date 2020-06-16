@@ -171,12 +171,11 @@ h3 {
     float: right;
     border: none;
     padding: none;
-    text-decoration: line-through;
     margin-top: 3vh;
 }
 
 .settingsButton:hover {
-    text-decoration: underline line-through;
+    text-decoration: underline;
     border: none;
 }
 
