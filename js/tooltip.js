@@ -46,13 +46,13 @@ function tooltip(what, event, infoA, infoB){
             drawTooltip("load");
         }
     } else {
-        if (window.clones[what] && window.clones[what].tooltip.info) {
+        if (window.clones[what] && window.TOOLTIPS[what].info) {
             title = what.charAt(0).toUpperCase() + what.slice(1);
-            info = window.clones[what].tooltip.info;
+            info = window.TOOLTIPS[what].info;
             info += window.clones[what].benefit;
 
-            if (window.clones[what].tooltip.info2) {
-                info += window.clones[what].tooltip.info2;
+            if (window.TOOLTIPS[what].info2) {
+                info += window.TOOLTIPS[what].info2;
             }
             
             for (const i in window.clones[what].requires) {
@@ -63,16 +63,16 @@ function tooltip(what, event, infoA, infoB){
             if (cost != "") {
                 cost = cost.substring(0, cost.length - 2);
             } 
-        } else if (window.purchases[what] && window.purchases[what].tooltip.info) {
+        } else if (window.purchases[what] && window.TOOLTIPS[what].info) {
             title = what.charAt(0).toUpperCase() + what.slice(1);
-            info = window.purchases[what].tooltip.info;
+            info = window.TOOLTIPS[what].info;
 
             for (const benefitName in window.purchases[what].benefit) {
                 info += window.purchases[what].benefit[benefitName];
             }
 
-            if (window.purchases[what].tooltip.info2) {
-                info += window.purchases[what].tooltip.info2;
+            if (window.TOOLTIPS[what].info2) {
+                info += window.TOOLTIPS[what].info2;
             }
             
             for (const i in window.purchases[what].requires) {

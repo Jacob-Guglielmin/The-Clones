@@ -5,8 +5,7 @@
  */
 
 //Declare variables
-
-var trackers, resources, revealed
+var trackers, resources, purchases, clones, revealed
 
 /**
  * Resets all variables. **THIS IS A HARD RESET**
@@ -67,9 +66,6 @@ function resetVariables() {
             benefitType: "story",
             requires: {
                 metal: 50
-            },
-            tooltip: {
-                info: "A simple hand crank generator. It doesn't look like much, but it provides some power."
             }
         },
         crate: {
@@ -78,10 +74,6 @@ function resetVariables() {
             benefitType: "storage metal",
             requires: {
                 metal: 25
-            },
-            tooltip: {
-                info: "Keeps some scrap metal better organized, allowing you to store ",
-                info2: " more metal."
             }
         },
         spear: {
@@ -89,9 +81,6 @@ function resetVariables() {
             benefitType: "story",
             requires: {
                 metal: 20
-            },
-            tooltip: {
-                info: "Well, you can't really call it a spear. More like a pointy club, really, but it'll do."
             }
         },
         escape: {
@@ -99,9 +88,6 @@ function resetVariables() {
             benefitType: "story",
             requires: {
                 science: 150
-            },
-            tooltip: {
-                info: "Come up with something that could open the door with nothing but what you find in the room."
             }
         },
         explosive: {
@@ -110,9 +96,6 @@ function resetVariables() {
             requires: {
                 metal: 50,
                 science: 100
-            },
-            tooltip: {
-                info: "A small explosive device made from chemicals you were able to find in some machines. It shouldn't do much damage to anything it isn't next to."
             }
         }
     },
@@ -125,10 +108,6 @@ function resetVariables() {
             benefit: 1,
             requires: {
                 food: 20
-            },
-            tooltip: {
-                info: "Farmers will make sure that all the crops that get plated are tended to, resulting in each farmer producing ",
-                info2: " food per second."
             }
         },
         researcher: {
@@ -136,16 +115,23 @@ function resetVariables() {
             benefit: 0.2,
             requires: {
                 science: 10
-            },
-            tooltip: {
-                info: "Researchers will spend their time thinking, and will produce ",
-                info2: " science every second. Occasionally, a researcher may think of something new you could build."
             }
         }
     },
+    //TODO Set up saving
     revealed = {
-        metalStorage: false,
-        cloning: false
+        //Story-based
+        metal: false,
+        spear: false,
+        science: false,
+        power: false,
+        cloning: false,
+        upgrades: false,
+        explosive: false,
+        food: false,
+
+        //Other
+        metalStorage: false
     }
 }
 resetVariables();
@@ -180,6 +166,37 @@ var STORY = [
 HINTS = [
     /* 0 */"After getting a bunch of scrap metal, you realize that you don't have a lot of space to put it. If you built a storage crate, you could keep some more."
 ],
+TOOLTIPS = {
+    
+    //Purchases
+    generator: {
+        info: "A simple hand crank generator. It doesn't look like much, but it provides some power."
+    },
+    crate: {
+        info: "Keeps some scrap metal better organized, allowing you to store ",
+        info2: " more metal."
+    },
+    spear: {
+        info: "Well, you can't really call it a spear. More like a pointy club, really, but it'll do."
+    },
+    escape: {
+        info: "Come up with something that could open the door with nothing but what you find in the room."
+    },
+    explosive: {
+        info: "A small explosive device made from chemicals you were able to find in some machines. It shouldn't do much damage to anything it isn't next to."
+    },
+
+    //Clones
+    farmer: {
+        info: "Farmers will make sure that all the crops that get plated are tended to, resulting in each farmer producing ",
+        info2: " food per second."
+    },
+    researcher: {
+        info: "Researchers will spend their time thinking, and will produce ",
+        info2: " science every second. Occasionally, a researcher may think of something new you could build."
+    }
+},
+
 storyDisplayed = "",
 
 autoSaveCounter = 0
@@ -551,6 +568,7 @@ function reveal(revealing) {
         case 0:
             document.getElementById("metalContainer").classList.remove("hidden");
             document.getElementById("purchaseContainer").classList.remove("hidden");
+            revealed.metal = true;
             break;
 
         case 1:
@@ -562,17 +580,20 @@ function reveal(revealing) {
 
         case 2:
             document.getElementById("spearButton").classList.remove("hidden");
+            revealed.spear = true;
             break;
 
         case 3:
             document.getElementById("clonesContainer").classList.remove("hidden");
             document.getElementById("scienceContainer").classList.remove("hidden");
+            revealed.science = true;
             break;
 
         case 4:
             document.getElementById("cloningContainer").classList.remove("hidden");
             document.getElementById("powerContainer").classList.remove("hidden");
             document.getElementById("actionTable").classList.add("hidden");
+            revealed.power = true;
             break;
 
         case 5:
@@ -585,6 +606,7 @@ function reveal(revealing) {
         case 6:
             addStory(21);
             document.getElementById("upgradesButton").classList.remove("hidden");
+            revealed.upgrades = true;
     
         default:
             break;
@@ -657,6 +679,7 @@ function purchase(item, amount) {
                     addStory(22);
                     document.getElementById("escapeButton").classList.add("hidden");
                     document.getElementById("explosiveButton").classList.remove("hidden");
+                    revealed.explosive = true;
                     break;
 
                 case "explosive":
@@ -664,6 +687,7 @@ function purchase(item, amount) {
                     document.getElementById("explosiveButton").classList.add("hidden");
                     document.getElementById("foodContainer").classList.remove("hidden");
                     document.getElementById("farmerButton").classList.remove("hidden");
+                    revealed.food = true;
                     break;
             
                 default:

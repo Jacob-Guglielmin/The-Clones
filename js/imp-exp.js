@@ -11,6 +11,11 @@ decompressed = ""
  */
 function save(saveType) {
     saveVar = {
+        trackers: window["trackers"],
+        resources: window["resources"],
+        purchases: window["purchases"],
+        clones: window["clones"],
+        revealed: window["revealed"]
     }
 
     decompressed = JSON.stringify(saveVar);
