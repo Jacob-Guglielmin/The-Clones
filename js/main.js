@@ -4,8 +4,10 @@
  * Jacob Guglielmin
  */
 
+var version = 0.2;
+
 //Declare variables
-var trackers, resources, purchases, clones, revealed
+var trackers, resources, purchases, clones, revealed;
 
 /**
  * Resets all variables. **THIS IS A HARD RESET**
@@ -61,20 +63,12 @@ function resetVariables() {
         }
     },
     purchases = {
+        //Story-based purchases
         generator: {
             owned: 0,
             benefitType: "story",
             requires: {
                 metal: 50
-            }
-        },
-        //TODO Add a food storage
-        crate: {
-            owned: 0,
-            benefit: 50,
-            benefitType: "storage metal",
-            requires: {
-                metal: 25
             }
         },
         spear: {
@@ -97,6 +91,24 @@ function resetVariables() {
             requires: {
                 metal: 50,
                 science: 100
+            }
+        },
+
+        //Storages
+        crate: {
+            owned: 0,
+            benefit: 50,
+            benefitType: "storage metal",
+            requires: {
+                metal: 25
+            }
+        },
+        shed: {
+            owned: 0,
+            benefit: 50,
+            benefitType: "storage food",
+            requires: {
+                food: 25
             }
         }
     },
@@ -133,7 +145,7 @@ function resetVariables() {
 
         //Other
         metalStorage: false
-    }
+    };
 }
 resetVariables();
 
@@ -157,7 +169,7 @@ var STORY = [
     /* 15 */"You pull on the door, but it still won't open. You try pushing some buttons on the machine, and one of them opens the door. When you look inside, you see what looks like yourself in the chamber. Frightened, you close the door and block it with some debris. It doesn't seem like a good idea to open that door again unless you have a way to defend yourself.",
     /* 16 */"Satisfied that you'll be protected now, you push away the debris and open the door again. You pull... yourself? An alien? Whatever it is, out of the chamber. It looks like it is sleeping for now, but you aren't sure how long it'll stay that way. In the meantime, you should hook up your generator to the power system.",
     /* 17 */"Whatever came from the chamber just woke up. It stands up, looks around, and sees you. It looks frightened. You tell it your name, and it hesitantly replies that it thought that was its name too. At least that clears up one thing. However it happened, there is now two of you stuck in this room. In other news, the generator system seems like it works.",
-    /* 18 */"Talking to the Clone, you find out that it doesn't have all your memories. After explaining your situation to it, it says that it would happily help you.",
+    /* 18 */"Talking to the Clone, you find out that it doesn't have all your memories. After explaining your situation to it, it says that it would happily help you. You both agree that the priority should be research into what exactly the machine in the middle of the room does.",
     /* 19 */"After being busy examining wire pathways with you, the Clone tells you that the machine in the middle of the room seems to be connected in a lot of ways to the machine the Clone came out of. They suggest that maybe when you got into the tube, it may have activated the machines that created the Clone. Getting in again would give you a better idea of whether that is the case.",
     /* 20 */"You step into the machine again and close the door. After waiting a few minutes, you hear a whirring sound from the roof. It continues for about 30 seconds, and then it stops again. You step out of the machine, and the Clone examines the machine it came out of. It seems to have been activated again. Looks like there'll be three of you in a while. As long as you still have power, you should be able to make as many Clones as you need.",
     /* 21 */"With this many Clones, you are going to run out of food by the end of the day. You all decide that if you're going to make it out of here, you'll need to spend most of your time looking for a way out.",
@@ -165,17 +177,14 @@ var STORY = [
     /* 23 */"With your explosive armed, you all hide behind machines and detonate it. After everything has settled, you go over to the door and open it up. You look at where you are, but all that is outside of the room is forests and mountains. Looking at the outside of the building, you see that there should be more to the building, but the whole planet is absent of buildings and technology, except for your little room. It doesn't look like you're just going to be able to ask someone where you are. Before you do anything else, you're going to need some food."
 ],
 HINTS = [
-    /* 0 */"After getting a bunch of scrap metal, you realize that you don't have a lot of space to put it. If you built a storage crate, you could keep some more."
+    /* 0 */"After getting a bunch of scrap metal, you realize that you don't have a lot of space to put it. If you built a storage crate, you could keep some more.",
+    /* 1 */"I guess food won't be too much of an issue now, but food storage, maybe. You could build a shed outside to store a lot more."
 ],
 TOOLTIPS = {
     
-    //Purchases
+    //Story-based purchases
     generator: {
         info: "A simple hand crank generator. It doesn't look like much, but it provides some power."
-    },
-    crate: {
-        info: "Keeps some scrap metal better organized, allowing you to store ",
-        info2: " more metal."
     },
     spear: {
         info: "Well, you can't really call it a spear. More like a pointy club, really, but it'll do."
@@ -185,6 +194,16 @@ TOOLTIPS = {
     },
     explosive: {
         info: "A small explosive device made from chemicals you were able to find in some machines. It shouldn't do much damage to anything it isn't next to."
+    },
+
+    //Storages
+    crate: {
+        info: "Keeps some scrap metal better organized, allowing you to store ",
+        info2: " more metal."
+    },
+    shed: {
+        info: "Keeps some extra food out of the rain, allowing you to keep ",
+        info2: " more food."
     },
 
     //Clones
@@ -363,6 +382,8 @@ function incrementResource(resource) {
             resources[resource].dTotal = resources[resource].max;
             if (!revealed.metalStorage && resource == "metal") {
                 reveal(1);
+            } else if (!revealed.foodStorage && resource == "food") {
+                reveal(7);
             }
         }
         if (!revealed.cloning && resource == "science" && resources[resource].total >= 100) {
@@ -610,6 +631,14 @@ function reveal(revealing) {
             addStory(21);
             document.getElementById("upgradesButton").classList.remove("hidden");
             revealed.upgrades = true;
+            break;
+
+        case 7:
+            addStory(1, true);
+            document.getElementById("foodMaxContainer").classList.remove("hidden");
+            document.getElementById("shedButton").classList.remove("hidden");
+            revealed.metalStorage = true;
+            break;
     
         default:
             break;

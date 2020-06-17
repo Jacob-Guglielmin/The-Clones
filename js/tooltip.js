@@ -67,8 +67,8 @@ function tooltip(what, event, infoA, infoB){
             title = what.charAt(0).toUpperCase() + what.slice(1);
             info = window.TOOLTIPS[what].info;
 
-            for (const benefitName in window.purchases[what].benefit) {
-                info += window.purchases[what].benefit[benefitName];
+            if (window.purchases[what].benefit) {
+                info += window.purchases[what].benefit;
             }
 
             if (window.TOOLTIPS[what].info2) {
