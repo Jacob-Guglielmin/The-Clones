@@ -208,7 +208,7 @@ TOOLTIPS = {
 
     //Clones
     farmer: {
-        info: "Farmers will make sure that all the crops that get plated are tended to, resulting in each farmer producing ",
+        info: "Farmers will make sure that all the crops that get planted are tended to, resulting in each farmer producing ",
         info2: " food per second."
     },
     researcher: {
@@ -275,6 +275,7 @@ function tick() {
     updateTooltip();
     updateResourceValues();
     updateCloneValues();
+    updatePurchaseValues();
 
     autoSaveCounter++;
     if (autoSaveCounter >= 600) {
@@ -637,7 +638,7 @@ function reveal(revealing) {
             addStory(1, true);
             document.getElementById("foodMaxContainer").classList.remove("hidden");
             document.getElementById("shedButton").classList.remove("hidden");
-            revealed.metalStorage = true;
+            revealed.foodStorage = true;
             break;
     
         default:
@@ -688,6 +689,9 @@ function purchase(item, amount) {
         if (purchases[item].benefitType.includes("storage")) {
             if (purchases[item].benefitType.includes("metal")) {
                 resources.metal.max += purchases[item].benefit;
+            }
+            if (purchases[item].benefitType.includes("food")) {
+                resources.food.max += purchases[item].benefit;
             }
         }
 

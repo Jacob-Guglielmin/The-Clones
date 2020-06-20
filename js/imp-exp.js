@@ -151,6 +151,13 @@ function load(loadType) {
                 document.getElementById("metalMaxContainer").classList.remove("hidden");
                 document.getElementById("crateButton").classList.remove("hidden");
             }
+            if (loadVar.revealed.foodStorage) {
+                document.getElementById("foodMaxContainer").classList.remove("hidden");
+                document.getElementById("shedButton").classList.remove("hidden");
+            }
+            updateResourceValues();
+            updateCloneValues();
+            updatePurchaseValues();
         }
     }
 }
