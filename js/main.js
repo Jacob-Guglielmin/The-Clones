@@ -4,7 +4,7 @@
  * Jacob Guglielmin
  */
 
-var version = 0.2;
+var version = 0.3;
 
 //Declare variables
 var trackers, resources, purchases, clones, revealed;
@@ -18,7 +18,7 @@ function resetVariables() {
         actions: {
             counter: 0,
             //DEVONLY Set to 10
-            required: 5,
+            required: 3,
             actioning: 0,
             canAction: true
         },
@@ -123,6 +123,14 @@ function resetVariables() {
                 food: 20
             }
         },
+        miner: {
+            total: 0,
+            benefit: 0.5,
+            requires: {
+                food: 10,
+                metal: 10,
+            }
+        },
         researcher: {
             total: 0,
             benefit: 0.2,
@@ -142,6 +150,7 @@ function resetVariables() {
         upgrades: false,
         explosive: false,
         food: false,
+        miners: false,
 
         //Other
         metalStorage: false
@@ -174,7 +183,8 @@ var STORY = [
     /* 20 */"You step into the machine again and close the door. After waiting a few minutes, you hear a whirring sound from the roof. It continues for about 30 seconds, and then it stops again. You step out of the machine, and the Clone examines the machine it came out of. It seems to have been activated again. Looks like there'll be three of you in a while. As long as you still have power, you should be able to make as many Clones as you need.",
     /* 21 */"With this many Clones, you are going to run out of food by the end of the day. You all decide that if you're going to make it out of here, you'll need to spend most of your time looking for a way out.",
     /* 22 */"You've been looking at some of the machines in the room, and one of the Clones thinks that you could make a small explosive that you could detonate next to the door to dislodge it.",
-    /* 23 */"With your explosive armed, you all hide behind machines and detonate it. After everything has settled, you go over to the door and open it up. You look at where you are, but all that is outside of the room is forests and mountains. Looking at the outside of the building, you see that there should be more to the building, but the whole planet is absent of buildings and technology, except for your little room. It doesn't look like you're just going to be able to ask someone where you are. Before you do anything else, you're going to need some food."
+    /* 23 */"With your explosive armed, you all hide behind machines and detonate it. After everything has settled, you go over to the door and open it up. You look at where you are, but all that is outside of the room is forests and mountains. Looking at the outside of the building, you see that there should be more to the building, but the whole planet is absent of buildings and technology, except for your little room. It doesn't look like you're just going to be able to ask someone where you are. Before you do anything else, you're going to need some food.",
+    /* 24 */"After a while, you think that you've managed to get your farm doing fairly well. However, it's going to take a lot of food to sustain any more clones that would be working with you. Looking around, you spot a cave in a mountain that could have metal in it. You all agree that mining there would be a better idea than taking apart machines that you don't know much about."
 ],
 HINTS = [
     /* 0 */"After getting a bunch of scrap metal, you realize that you don't have a lot of space to put it. If you built a storage crate, you could keep some more.",
@@ -211,9 +221,13 @@ TOOLTIPS = {
         info: "Farmers will make sure that all the crops that get planted are tended to, resulting in each farmer producing ",
         info2: " food per second."
     },
+    miner: {
+        info: "Miners work to break up rocks that you find in the nearby mountains, and occasionally find some metal in them. Each miner can find ",
+        info2: " pieces of metal per second."
+    },
     researcher: {
         info: "Researchers will spend their time thinking, and will produce ",
-        info2: " science every second. Occasionally, a researcher may think of something new you could build."
+        info2: " science every second."
     }
 },
 
@@ -307,6 +321,7 @@ function updateResourceValues() {
  */
 function calculateNetResources() {
     resources.food.net = Math.round((clones.farmer.total * clones.farmer.benefit) * 10) / 10;
+    resources.metal.net = Math.round((clones.miner.total * clones.miner.benefit) * 10) / 10;
     resources.science.net = Math.round((clones.researcher.total * clones.researcher.benefit) * 10) / 10;
 }
 
@@ -387,8 +402,10 @@ function incrementResource(resource) {
                 reveal(7);
             }
         }
-        if (!revealed.cloning && resource == "science" && resources[resource].total >= 100) {
+        if (!revealed.cloning && resource == "science" && resources[resource].total >= 75) {
             reveal(5);
+        } else if (!revealed.miners && resource == "food" && resources[resource].total >= 50) {
+            reveal(8);
         }
         updateResourceValues();
         updatePurchaseValues();
@@ -484,7 +501,8 @@ function action(waitComplete) {
                     changeAction("Sleeping");
                     document.getElementById("actionButton").disabled = true;
                     trackers.actions.actioning = 8;
-                    trackers.wait.time = 10;
+                    //DEVONLY Set to 10
+                    trackers.wait.time = 3;
                     setTimeout(() => {
                         trackers.wait.waiting = true;
                     }, 200);
@@ -639,6 +657,15 @@ function reveal(revealing) {
             document.getElementById("foodMaxContainer").classList.remove("hidden");
             document.getElementById("shedButton").classList.remove("hidden");
             revealed.foodStorage = true;
+            break;
+
+        case 8:
+            addStory(24);
+            document.getElementById("minerButton").classList.remove("hidden");
+            document.getElementById("metalNetContainer").classList.remove("hidden");
+            document.getElementById("metalButton").innerHTML = "Smelt Metal";
+            clones.researcher.requires.food = 10;
+            revealed.miners = true;
             break;
     
         default:

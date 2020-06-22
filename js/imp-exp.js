@@ -25,9 +25,9 @@ function save(saveType) {
 
     if (saveType == "localStorage") {
         //DEVONLY Enable localStorage
-        /* try {
-            localStorage.setItem("clonesSave", compressed);
-        } catch (e) {} */
+        try {
+            //localStorage.setItem("clonesSave", compressed);
+        } catch (e) {}
     } else if (saveType == "export") {
         document.getElementById("exportBox").value = compressed;
         setTimeout(() => {
@@ -136,6 +136,14 @@ function load(loadType) {
                                                 document.getElementById("explosiveButton").classList.add("hidden");
                                                 document.getElementById("foodContainer").classList.remove("hidden");
                                                 document.getElementById("farmerButton").classList.remove("hidden");
+                                                
+                                                if(loadVar.revealed.miners) {
+
+                                                    document.getElementById("minerButton").classList.remove("hidden");
+                                                    document.getElementById("metalNetContainer").classList.remove("hidden");
+                                                    document.getElementById("metalButton").innerHTML = "Smelt Metal";
+
+                                                }
                                             }
                                         }
                                     }
