@@ -46,13 +46,13 @@ function tooltip(what, event, infoA, infoB){
             drawTooltip("load");
         }
     } else {
-        if (window.clones[what] && window.TOOLTIPS[what].info) {
+        if (window.clones[what] && TOOLTIPS[what].info) {
             title = what.charAt(0).toUpperCase() + what.slice(1);
-            info = window.TOOLTIPS[what].info;
+            info = TOOLTIPS[what].info;
             info += window.clones[what].benefit;
 
-            if (window.TOOLTIPS[what].info2) {
-                info += window.TOOLTIPS[what].info2;
+            if (TOOLTIPS[what].info2) {
+                info += TOOLTIPS[what].info2;
             }
             
             for (const i in window.clones[what].requires) {
@@ -63,16 +63,16 @@ function tooltip(what, event, infoA, infoB){
             if (cost != "") {
                 cost = cost.substring(0, cost.length - 2);
             } 
-        } else if (window.purchases[what] && window.TOOLTIPS[what].info) {
+        } else if (window.purchases[what] && TOOLTIPS[what].info) {
             title = what.charAt(0).toUpperCase() + what.slice(1);
-            info = window.TOOLTIPS[what].info;
+            info = TOOLTIPS[what].info;
 
             if (window.purchases[what].benefit) {
                 info += window.purchases[what].benefit;
             }
 
-            if (window.TOOLTIPS[what].info2) {
-                info += window.TOOLTIPS[what].info2;
+            if (TOOLTIPS[what].info2) {
+                info += TOOLTIPS[what].info2;
             }
             
             for (const i in window.purchases[what].requires) {

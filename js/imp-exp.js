@@ -66,8 +66,8 @@ function load(loadType) {
         if (continueLoad) {
 
             //Cancel writing the start of the story
-            if (window.startTask) {
-                clearTimeout(window.startTask);
+            if (window.storyTask) {
+                window.storyTask = false;
                 console.log("Loading save - cancelling timeout");
             }
 
@@ -113,7 +113,7 @@ function load(loadType) {
 
                             if (loadVar.revealed.science) {
 
-                                document.getElementById("clonesContainer").classList.remove("hidden");
+                                document.getElementById("jobsButton").classList.remove("hidden");
                                 document.getElementById("scienceContainer").classList.remove("hidden");
 
                                 if (loadVar.revealed.cloning) {
@@ -137,12 +137,22 @@ function load(loadType) {
                                                 document.getElementById("foodContainer").classList.remove("hidden");
                                                 document.getElementById("farmerButton").classList.remove("hidden");
                                                 
-                                                if(loadVar.revealed.miners) {
+                                                if (loadVar.revealed.miners) {
 
                                                     document.getElementById("minerButton").classList.remove("hidden");
                                                     document.getElementById("metalNetContainer").classList.remove("hidden");
                                                     document.getElementById("metalButton").innerHTML = "Smelt Metal";
 
+                                                    if (loadVar.revealed.plans) {
+
+                                                        document.getElementById("plansButton").classList.remove("hidden");
+
+                                                        if (loadVar.revealed.exploration) {
+
+                                                            document.getElementById("plansButton").classList.add("hidden");
+
+                                                        }
+                                                    }
                                                 }
                                             }
                                         }

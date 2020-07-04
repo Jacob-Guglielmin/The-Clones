@@ -98,30 +98,78 @@ h3 {
 }
 
 /* TODO Set this height? width? better */
-#clonesContainer {
+#battleContainer {
+    box-sizing: border-box;
     position: relative;
     left: 3vw;
-    top: 10vh;
+    top: 9.45vh;
     width: 45.5vw;
-    height: 49.55vh;
+    height: 50vh;
     border: 1px solid #EEE;
     background-color: #35372F;
-    padding: 0;
+    padding: 5px;
     margin: 0;
 }
 
-#totalClonesContainer {
-    padding: 10px;
-    display: inline-block;
-    width: 50%;
+#armyContainer {
+    float: left;
+    width: calc(50% - 5px);
     margin: 0;
-    padding-bottom: 0;    
+    margin-right: 10px;
+    margin-bottom: 5px;
 }
 
-#unemployedClonesContainer {
+#armyHealth {
+    width: 0;
+}
+
+#enemyContainer {
     float: right;
-    padding: 10px;
-    padding-bottom: 0;
+    width: calc(50% - 5px);
+    margin: 0;
+}
+
+#enemyHealth {
+    width: 0;
+}
+
+#battleInfoContainer {
+    position: absolute;
+    box-sizing: border-box;
+    width: calc(13.5vw - 17px);
+    top: calc(10.7vh + 10.5px);
+}
+
+#zoneNumber {
+    display: inline-block;
+    text-align: center;
+    line-height: 7vh;
+    width: 100%;
+    height: 7vh;
+    border: 1px solid #EEE;
+    margin-bottom: 5px;
+}
+
+#fightButton {
+    box-sizing: content-box;
+    display: inline-block;
+    font-size: 2.2vh;
+    width: 100%;
+    height: 4vh;
+    padding: 0;
+}
+
+#battleTable {
+    border-collapse: collapse;
+    position: absolute;
+    left: 13vw;
+    top: calc(10.7vh + 10.5px);
+}
+
+#battleGrid>tr>td {
+    text-align: center;
+    font-size: 2vh;
+    vertical-align: middle;
 }
 
 #right {
@@ -156,6 +204,20 @@ h3 {
     margin: 0;
 }
 
+#totalClonesContainer {
+    padding: 10px;
+    display: inline-block;
+    width: 50%;
+    margin: 0;
+    padding-bottom: 0;    
+}
+
+#unemployedClonesContainer {
+    float: right;
+    padding: 10px;
+    padding-bottom: 0;
+}
+
 .headerButton {
     height: 7vh;
     width: 10vw;
@@ -180,7 +242,6 @@ h3 {
 }
 
 .progressBarOuter {
-    width: 25vw;
     height: 4vh;
     border-radius: 1vh;
     background-color: #BBB;
@@ -192,7 +253,43 @@ h3 {
     border-bottom-left-radius: 1vh;
     border-right: 2px solid #000;
     background-color: #2B0;
+}
+
+.resourceProgressBar {
+    width: 25vw;
+}
+
+.resourceProgressBarInner {
     transition: width 0.2s ease;
+}
+
+.battleProgressBar {
+    width: 100%;
+}
+
+.battleProgressBarInner {
+    transition: width 0.5s ease;
+}
+
+.battleTextRow {
+    width: 100%;
+    height: 3.5vh;
+}
+
+.battleCell {
+    box-sizing: border-box;
+    padding: 0;
+    width: 3.2vw;
+    height: calc(3.82vh - 1px);
+    border: 1.5px solid #EEE;
+}
+
+.battleCellOn {
+    background-color: #2B0;
+}
+
+.battleCellBeaten {
+    background-color: #160;
 }
 
 .tabs {
@@ -206,7 +303,7 @@ h3 {
 
 .tabButton {
     position: relative;
-    width: 50%;
+    width: 25%;
     height: inherit;
     float: left;
     margin-right: 0;
