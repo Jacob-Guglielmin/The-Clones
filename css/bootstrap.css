@@ -109,33 +109,6 @@ samp {
   font-family: monospace, monospace;
   font-size: 1em;
 }
-button,
-input,
-optgroup,
-select,
-textarea {
-  margin: 0;
-  font: inherit;
-  color: inherit;
-}
-button {
-  overflow: visible;
-}
-button,
-select {
-  text-transform: none;
-}
-button,
-html input[type="button"],
-input[type="reset"],
-input[type="submit"] {
-  -webkit-appearance: button;
-  cursor: pointer;
-}
-button[disabled],
-html input[disabled] {
-  cursor: default;
-}
 button::-moz-focus-inner,
 input::-moz-focus-inner {
   padding: 0;
@@ -174,19 +147,8 @@ legend {
   padding: 0;
   border: 0;
 }
-textarea {
-  overflow: auto;
-}
 optgroup {
   font-weight: bold;
-}
-table {
-  border-spacing: 0;
-  border-collapse: collapse;
-}
-td,
-th {
-  padding: 0;
 }
 /*! Source: https://github.com/h5bp/html5-boilerplate/blob/master/src/css/main.css */
 @media print {
@@ -4920,7 +4882,6 @@ a.thumbnail.active {
   padding: 9px;
   color: #333;
 }
-}
 @-webkit-keyframes progress-bar-stripes {
   from {
     background-position: 40px 0;
@@ -6507,4 +6468,3 @@ button.close {
     display: none !important;
   }
 }
-/*# sourceMappingURL=bootstrap.css.map */

@@ -1,3 +1,5 @@
+"use strict";
+
 var 
 title = "",
 info = "",
@@ -46,49 +48,51 @@ function tooltip(what, event, infoA, infoB){
             drawTooltip("load");
         }
     } else {
-        if (window.clones[what] && TOOLTIPS[what].info) {
-            title = what.charAt(0).toUpperCase() + what.slice(1);
-            info = TOOLTIPS[what].info;
-            info += window.clones[what].benefit;
+        if (TOOLTIPS.hasOwnProperty(what)) {
+            if (window.clones[what] && TOOLTIPS[what].info) {
+                title = what.charAt(0).toUpperCase() + what.slice(1);
+                info = TOOLTIPS[what].info;
+                info += window.clones[what].benefit;
 
-            if (TOOLTIPS[what].info2) {
-                info += TOOLTIPS[what].info2;
-            }
-            
-            for (const i in window.clones[what].requires) {
-                if (window.clones[what].requires[i] != 0) {
-                    cost += window.resources[i].total + "/" + window.clones[what].requires[i] + " " + i.charAt(0).toUpperCase() + i.slice(1) + ", ";
+                if (TOOLTIPS[what].info2) {
+                    info += TOOLTIPS[what].info2;
                 }
-            }
-            if (cost != "") {
-                cost = cost.substring(0, cost.length - 2);
-            } 
-        } else if (window.purchases[what] && TOOLTIPS[what].info) {
-            title = what.charAt(0).toUpperCase() + what.slice(1);
-            info = TOOLTIPS[what].info;
-
-            if (window.purchases[what].benefit) {
-                info += window.purchases[what].benefit;
-            }
-
-            if (TOOLTIPS[what].info2) {
-                info += TOOLTIPS[what].info2;
-            }
-            
-            for (const i in window.purchases[what].requires) {
-                if (window.purchases[what].requires[i] != 0) {
-                    cost += window.resources[i].total + "/" + window.purchases[what].requires[i] + " " + i.charAt(0).toUpperCase() + i.slice(1) + ", ";
+                
+                for (const i in window.clones[what].requires) {
+                    if (window.clones[what].requires[i] != 0) {
+                        cost += Math.floor(window.resources[i].total) + "/" + window.clones[what].requires[i] + " " + i.charAt(0).toUpperCase() + i.slice(1) + ", ";
+                    }
                 }
+                if (cost != "") {
+                    cost = cost.substring(0, cost.length - 2);
+                } 
+            } else if (window.purchases[what] && TOOLTIPS[what].info) {
+                title = what.charAt(0).toUpperCase() + what.slice(1);
+                info = TOOLTIPS[what].info;
+
+                if (window.purchases[what].benefit) {
+                    info += window.purchases[what].benefit;
+                }
+
+                if (TOOLTIPS[what].info2) {
+                    info += TOOLTIPS[what].info2;
+                }
+                
+                for (const i in window.purchases[what].requires) {
+                    if (window.purchases[what].requires[i] != 0) {
+                        cost += Math.floor(window.resources[i].total) + "/" + window.purchases[what].requires[i] + " " + i.charAt(0).toUpperCase() + i.slice(1) + ", ";
+                    }
+                }
+                if (cost != "") {
+                    cost = cost.substring(0, cost.length - 2);
+                }
+            } else {
+                title = what.charAt(0).toUpperCase() + what.slice(1);
+                info = infoA;
+                cost = infoB;
             }
-            if (cost != "") {
-                cost = cost.substring(0, cost.length - 2);
-            }
-        } else {
-            title = what.charAt(0).toUpperCase() + what.slice(1);
-            info = infoA;
-            cost = infoB;
+            drawTooltip(event);
         }
-        drawTooltip(event);
     }
 }
 

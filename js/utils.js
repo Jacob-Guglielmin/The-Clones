@@ -1,3 +1,5 @@
+"use strict";
+
 var STORY = [
     /* 0 */"You awaken in a dark room. You aren't quite sure exactly who you are, or what you were doing.",
     /* 1 */"You start searching the room you are in for any hint as to what might have happened, but it's a difficult task with no lights.",
@@ -19,7 +21,7 @@ var STORY = [
     /* 17 */"Whatever came from the chamber just woke up. It stands up, looks around, and sees you. It looks frightened. You tell it your name, and it hesitantly replies that it thought that was its name too. At least that clears up one thing. However it happened, there is now two of you stuck in this room. In other news, the generator system seems like it works.",
     /* 18 */"Talking to the Clone, you find out that it doesn't have all your memories. After explaining your situation to it, it says that it would happily help you. You both agree that the priority should be research into what exactly the machine in the middle of the room does.",
     /* 19 */"After being busy examining wire pathways with you, the Clone tells you that the machine in the middle of the room seems to be connected in a lot of ways to the machine the Clone came out of. They suggest that maybe when you got into the tube, it may have activated the machines that created the Clone. Getting in again would give you a better idea of whether that is the case.",
-    /* 20 */"You step into the machine again and close the door. After waiting a few minutes, you hear a whirring sound from the roof. It continues for about 30 seconds, and then it stops again. You step out of the machine, and the Clone examines the machine it came out of. It seems to have been activated again. Looks like there'll be three of you in a while. As long as you still have power, you should be able to make as many Clones as you need.",
+    /* 20 */"You step into the machine again and close the door. After waiting a few minutes, you hear a whirring sound from the roof. It continues for about 30 seconds, and then it stops again. You step out of the machine, and the Clone examines the machine it came out of. It seems to have been activated again. Looks like there'll be three of you in a while. As long as you still have power, you should be able to make as many Clones as you need. Unfortunately, you don't have enough space for all of the clones to be working, so you will only give half of them jobs.",
     /* 21 */"With this many Clones, you are going to run out of food by the end of the day. You all decide that if you're going to make it out of here, you'll need to spend most of your time looking for a way out.",
     /* 22 */"You've been looking at some of the machines in the room, and one of the Clones thinks that you could make a small explosive that you could detonate next to the door to dislodge it.",
     /* 23 */"With your explosive armed, you all hide behind machines and detonate it. After everything has settled, you go over to the door and open it up. You look at where you are, but all that is outside of the room is forests and mountains. Looking at the outside of the building, you see that there should be more to the building, but the whole planet is absent of buildings and technology, except for your little room. It doesn't look like you're just going to be able to ask someone where you are. Before you do anything else, you're going to need some food.",
@@ -32,7 +34,6 @@ HINTS = [
     /* 1 */"I guess food won't be too much of an issue now, but food storage, maybe. You could build a shed outside to store a lot more."
 ],
 TOOLTIPS = {
-    
     //Story-based purchases
     generator: {
         info: "A simple hand crank generator. It doesn't look like much, but it provides some power."

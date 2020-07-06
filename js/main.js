@@ -1,10 +1,11 @@
+"use strict";
 /**
  * The Clones 
  * 
  * Jacob Guglielmin
  */
 
-var version = 0.3;
+const version = 0.3;
 
 //Declare variables
 var trackers, resources, purchases, clones, revealed;
@@ -36,28 +37,24 @@ function resetVariables() {
     resources = {
         power: {
             total: 0,
-            dTotal: 0,
             net: 0,
             max: 100,
             increment: 1
         },
         food: {
             total: 0,
-            dTotal: 0,
             net: 0,
             max: 100,
             increment: 1
         },
         metal: {
             total: 0,
-            dTotal: 0,
             net: 0,
             max: 100,
             increment: 1
         },
         science: {
             total: 0,
-            dTotal: 0,
             net: 0,
             increment: 1
         }
@@ -119,6 +116,16 @@ function resetVariables() {
             requires: {
                 food: 25
             }
+        },
+
+        //Upgrades
+        test: {
+            owned: 0,
+            available: 3,
+            benefitType: "upgrade",
+            requires: {
+                science: 50
+            }
         }
     },
     clones = {
@@ -177,7 +184,8 @@ autoSaveCounter = 0,
 
 battleCounter = 0,
 
-startTask = null;
+storyTask = undefined,
+startTask = undefined;
 
 /**
  * Initializes the game
@@ -213,13 +221,12 @@ function init() {
 function tick() {
 
     //Increment resources from workers
-    for (resource in resources) {
-        if (!resources[resource].max || resources[resource].dTotal + resources[resource].net/10 <= resources[resource].max) {
-            resources[resource].dTotal += resources[resource].net/10;
-        } else if (resources[resource].dTotal < resources[resource].max) {
-            resources[resource].dTotal = resources[resource].max;
+    for (let resource in resources) {
+        if (!resources[resource].max || resources[resource].total + resources[resource].net/10 <= resources[resource].max) {
+            resources[resource].total += resources[resource].net/10;
+        } else if (resources[resource].total < resources[resource].max) {
+            resources[resource].total = resources[resource].max;
         }
-        resources[resource].total = Math.floor(resources[resource].dTotal);
         if (!revealed.cloningStory && resource == "science" && resources[resource].total >= 100) {
             reveal(5);
         }
@@ -260,8 +267,8 @@ function tick() {
  * Updates the total resources in the HTML
  */
 function updateResourceValues() {
-    for (resource in resources) {
-        document.getElementById(resource + "Total").innerHTML = resources[resource].total;
+    for (let resource in resources) {
+        document.getElementById(resource + "Total").innerHTML = Math.floor(resources[resource].total);
         document.getElementById(resource + "Net").innerHTML = resources[resource].net;
         if (resources[resource].max) {
             document.getElementById(resource + "Max").innerHTML = resources[resource].max;
@@ -289,18 +296,26 @@ function calculateNetResources() {
 function updatePurchaseValues() {
 
     //Iterate through all purchases
-    for (item in purchases) {
+    for (let item in purchases) {
+        //Check if button should be visible for upgrades
+        if (purchases[item].hasOwnProperty("available")) {
+            if (purchases[item].available >= 1) {
+                document.getElementById(item + "Button").classList.remove("hidden");
+            } else {
+                document.getElementById(item + "Button").classList.add("hidden");
+            }
+        }
         
         //Update button text
         let buttonText = item.charAt(0).toUpperCase() + item.slice(1);
         if (purchases[item].benefitType != "story") {
-            buttonText += "br" + purchases[item].owned;
+            buttonText += "<br>" + purchases[item].owned;
         }
         document.getElementById(item + "Button").innerHTML = buttonText;
         
         //Iterate through required resources and check each one
         let enabled = true;
-        for (resource in purchases[item].requires) {
+        for (let resource in purchases[item].requires) {
             if (resources[resource].total < purchases[item].requires[resource]) {
                 enabled = false;
             }
@@ -324,12 +339,12 @@ function updateCloneValues() {
     document.getElementById("totalClones").innerHTML = clones.total;
     document.getElementById("unemployedClones").innerHTML = clones.unemployed;
 
-    for (clone in clones) {
+    for (let clone in clones) {
         if (clone != "total" && clone != "unemployed" && clone != "available" && clone != "powerRequirement") {
             document.getElementById(clone + "Button").innerHTML = clone.charAt(0).toUpperCase() + clone.slice(1) + "<br>" + clones[clone].total;
             
             let isEnabled = true;
-            for (resource in clones[clone].requires) {
+            for (let resource in clones[clone].requires) {
                 if (resources[resource].total < clones[clone].requires[resource]) {
                     isEnabled = false;
                 }
@@ -355,10 +370,8 @@ function incrementResource(resource) {
     if (!resources[resource].max || resources[resource].total < resources[resource].max) {
         if (!resources[resource].max || resources[resource].total + resources[resource].increment < resources[resource].max) {
             resources[resource].total += resources[resource].increment;
-            resources[resource].dTotal += resources[resource].increment;
         } else {
             resources[resource].total = resources[resource].max;
-            resources[resource].dTotal = resources[resource].max;
             if (!revealed.metalStorage && resource == "metal") {
                 reveal(1);
             } else if (!revealed.foodStorage && resource == "food") {
@@ -383,7 +396,6 @@ function makeClone() {
     if (trackers.cloning.canClone && resources.power.total >= clones.powerRequirement) {
         trackers.cloning.counter++;
         resources.power.total -= clones.powerRequirement;
-        resources.power.dTotal -= clones.powerRequirement;
         updateResourceValues();
         document.getElementById("cloningProgressBar").style.width = (Math.floor(trackers.cloning.counter/trackers.cloning.required*100))+"%";
         if (trackers.cloning.counter >= trackers.cloning.required) {
@@ -511,7 +523,6 @@ function action(waitComplete) {
                 case 11:
                     addStory(13);
                     reveal(0);
-                    resources.metal.dTotal = 15;
                     resources.metal.total = 15;
                     updateResourceValues();
                     changeAction("");
@@ -663,8 +674,8 @@ function reveal(revealing) {
 /**
  * Purchases an upgrade or building and consumes the required resources
  * 
- * @param {string} item the thing to purchase
- * @param {number} amount how many to purchase
+ * @param {string} item The thing to purchase
+ * @param {number} amount How many to purchase
  */
 function purchase(item, amount) {
 
@@ -682,8 +693,11 @@ function purchase(item, amount) {
 
         for (const resource in purchases[item].requires) {
             resources[resource].total -= purchases[item].requires[resource];
-            resources[resource].dTotal -= purchases[item].requires[resource];
             purchases[item].requires[resource] = Math.floor(purchases[item].requires[resource] * 1.2);
+        }
+
+        if (purchases[item].hasOwnProperty("available")) {
+            purchases[item].available -= amount;
         }
 
         if (purchases[item].benefitType.includes("storage")) {
@@ -764,7 +778,6 @@ function hire(job, amount) {
         if (canHire) {
             for (const resource in clones[job].requires) {
                 resources[resource].total -= clones[job].requires[resource];
-                resources[resource].dTotal -= clones[job].requires[resource];
             }
             clones.unemployed -= amount;
             clones[job].total += amount;

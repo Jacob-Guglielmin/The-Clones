@@ -97,7 +97,6 @@ h3 {
     height: 25.3vh;
 }
 
-/* TODO Set this height? width? better */
 #battleContainer {
     box-sizing: border-box;
     position: relative;
@@ -151,7 +150,7 @@ h3 {
 }
 
 #fightButton {
-    box-sizing: content-box;
+    box-sizing: border-box;
     display: inline-block;
     font-size: 2.2vh;
     width: 100%;
@@ -183,8 +182,8 @@ h3 {
 #story {
     position: relative;
     left: 1.5vw;
-    top: 5vh;
-    height: 32vh;
+    top: 1vh;
+    height: 36.7vh;
     width: 43.9vw;
     border: 1px solid #EEE;
     padding: 10px;
@@ -194,14 +193,14 @@ h3 {
 
 #purchaseContainer {
     position: relative;
-    left: 1.5vw;
-    top: 10vh;
-    width: calc(43.9vw + 20px);
-    height: 39vh;
+    width: 43.9vw;
+    height: 43vh;
     border: 1px solid #EEE;
     background-color: #35372F;
     padding: 0;
     margin: 0;
+    margin-top: 5vh;
+    margin-left: 1.5vw;
 }
 
 #totalClonesContainer {
@@ -296,22 +295,33 @@ h3 {
     position: relative;
     left: 0px;
     top: 0px;
-    width: 45.5vw;
+    width: 100%;
     height: 6vh;
     background-color: #272823;
+    border-bottom: 1px solid #EEE;
 }
 
 .tabButton {
     position: relative;
     width: 25%;
-    height: inherit;
+    height: 100%;
     float: left;
     margin-right: 0;
-    border: 1px solid #EEE !important;
+    border: 1px solid #EEE;
+    border-top: 0;
+    border-bottom: 0;
+}
+
+.tabButton:hover {
+    color: #999;
+    border: 1px solid #EEE;
+    border-top: 0;
+    border-bottom: 0;
 }
 
 .currentTab {
-    background-color: #35372F !important;
+    background-color: #35372F;
+    height: inherit;
 }
 
 .purchase {
@@ -321,7 +331,7 @@ h3 {
     font-size: 2.5vh;
     line-height: 3.75vh;
     margin-left: 1.1vw;
-    margin-top: 20px;
+    margin-top: 1.1vw;
     margin-right: 0px;
     float: left;
 }

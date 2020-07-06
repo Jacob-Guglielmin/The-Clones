@@ -1,3 +1,4 @@
+"use strict";
 //Initialize variables
 var zone = 0,
 row = 0,
@@ -22,6 +23,7 @@ enemy = {
 },
 fighting = false,
 autoFight = false,
+locations = [],
 battleGrid = document.getElementById("battleGrid"),
 armyHealthBar = document.getElementById("armyHealth"),
 enemyHealthBar = document.getElementById("enemyHealth"),
@@ -94,6 +96,19 @@ function processBattleTick() {
 function nextCell() {
     //Advance the location variables and update the map
     battleGrid.children[row].children[cell].classList.add("battleCellBeaten");
+    if (locations.includes(row + "," + cell)) {
+        //Check if an upgrade should be made available
+        if (window.purchases.hasOwnProperty(locations[locations.indexOf(row + "," + cell) + 1])) {
+            window.purchases[locations[locations.indexOf(row + "," + cell) + 1]].available++;
+            window.updatePurchaseValues();
+
+        //Check if a resource should be given
+        } else if (window.resources.hasOwnProperty(locations[locations.indexOf(row + "," + cell) + 1])) {
+            window.resources[locations[locations.indexOf(row + "," + cell) + 1]].dTotal += 10;
+            window.resources[locations[locations.indexOf(row + "," + cell) + 1]].total += 10;
+            
+        }
+    }
     if (cell < 9) {
         cell++;
     } else {
@@ -137,20 +152,26 @@ function populateGrid() {
     }
 
     //Insert icons
-    addIcon(9, 9, "book");
+
+    addLocation(9, 9, "glyphicon", "glyphicon-book", "test");
+    addLocation(1, 1, "icomoon", "icon-cubes", "metal");
 }
 
 /**
- * Adds a glyphicon to a cell in the grid
+ * Adds a glyphicon and reward to a cell in the grid
  * 
  * @param {number} row The row to add the icon into
  * @param {number} col The column to add the icon into
- * @param {string} glyphName The icon to add
+ * @param {string} iconType The type of icon (glyphicon or icomoon)
+ * @param {string} iconName The icon to add
+ * @param {string} reward What to give the player on completion of the cell
  */
-function addIcon(row, col, glyphName) {
-    let glyphElement = document.createElement("span");
-    glyphElement.classList.add("glyphicon",("glyphicon-" + glyphName));
-    battleGrid.children[row].children[col].appendChild(glyphElement);
+function addLocation(row, col, iconType, iconName, reward) {
+    let icon = document.createElement("span");
+    icon.classList.add(iconType,iconName);
+    battleGrid.children[row].children[col].appendChild(icon);
+    locations.push(row + "," + col);
+    locations.push(reward);
 }
 
 /**
