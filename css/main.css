@@ -51,6 +51,10 @@ h3 {
     display: inline-block;
 }
 
+textarea {
+    resize: none;
+}
+
 #tooltip {
     position: absolute;
     z-index: 10;
@@ -219,10 +223,9 @@ h3 {
 
 .headerButton {
     height: 7vh;
-    width: 10vw;
+    width: calc(50% - 5px);
     margin-top: 1vh;
-    margin-left: 1vh;
-    margin-right: 0;
+    margin-right: 5px;
     float: left;
 }
 

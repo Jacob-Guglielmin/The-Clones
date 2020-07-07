@@ -23,7 +23,6 @@ enemy = {
 },
 fighting = false,
 autoFight = false,
-locations = [],
 battleGrid = document.getElementById("battleGrid"),
 armyHealthBar = document.getElementById("armyHealth"),
 enemyHealthBar = document.getElementById("enemyHealth"),
@@ -96,19 +95,9 @@ function processBattleTick() {
 function nextCell() {
     //Advance the location variables and update the map
     battleGrid.children[row].children[cell].classList.add("battleCellBeaten");
-    if (locations.includes(row + "," + cell)) {
-        //Check if an upgrade should be made available
-        if (window.purchases.hasOwnProperty(locations[locations.indexOf(row + "," + cell) + 1])) {
-            window.purchases[locations[locations.indexOf(row + "," + cell) + 1]].available++;
-            window.updatePurchaseValues();
 
-        //Check if a resource should be given
-        } else if (window.resources.hasOwnProperty(locations[locations.indexOf(row + "," + cell) + 1])) {
-            window.resources[locations[locations.indexOf(row + "," + cell) + 1]].dTotal += 10;
-            window.resources[locations[locations.indexOf(row + "," + cell) + 1]].total += 10;
-            
-        }
-    }
+    giveRewards();
+    
     if (cell < 9) {
         cell++;
     } else {
@@ -152,26 +141,44 @@ function populateGrid() {
     }
 
     //Insert icons
-
-    addLocation(9, 9, "glyphicon", "glyphicon-book", "test");
-    addLocation(1, 1, "icomoon", "icon-cubes", "metal");
+    addLocations();
 }
 
 /**
- * Adds a glyphicon and reward to a cell in the grid
- * 
- * @param {number} row The row to add the icon into
- * @param {number} col The column to add the icon into
- * @param {string} iconType The type of icon (glyphicon or icomoon)
- * @param {string} iconName The icon to add
- * @param {string} reward What to give the player on completion of the cell
+ * Adds all glyphicons and rewards to the correct cells in the grid
  */
-function addLocation(row, col, iconType, iconName, reward) {
-    let icon = document.createElement("span");
-    icon.classList.add(iconType,iconName);
-    battleGrid.children[row].children[col].appendChild(icon);
-    locations.push(row + "," + col);
-    locations.push(reward);
+function addLocations() {
+    for (let i = 0; i < MAP_LOCATIONS[zone].length; i++) {
+        let icon = document.createElement("span");
+        console.log(MAP_LOCATIONS[zone][i][3]);
+        if (MAP_LOCATIONS[zone][i][3].includes("glyphicon")) {
+            icon.classList.add("glyphicon", MAP_LOCATIONS[zone][i][3]);
+        } else {
+            icon.classList.add("icomoon", MAP_LOCATIONS[zone][i][3]);
+        }
+        battleGrid.children[MAP_LOCATIONS[zone][i][1]].children[MAP_LOCATIONS[zone][i][2]].appendChild(icon);
+    }
+}
+
+/**
+ * Give the reward (if any) for the cell
+ */
+function giveRewards() {
+    for (let i = 0; i < MAP_LOCATIONS[zone].length; i++) {
+        if (MAP_LOCATIONS[zone][i][0].includes(row + ", " + cell)) {
+            //Check if an upgrade should be made available
+            if (window.purchases.hasOwnProperty(MAP_LOCATIONS[zone][i][4])) {
+                window.purchases[MAP_LOCATIONS[zone][i][4]].available++;
+                window.updatePurchaseValues();
+                break;
+
+            //Check if a resource should be given
+            } else if (window.resources.hasOwnProperty(MAP_LOCATIONS[zone][i][4])) {
+                window.resources[MAP_LOCATIONS[zone][i][4]].total += 10;
+                break;
+            }
+        }
+    }
 }
 
 /**

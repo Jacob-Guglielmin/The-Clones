@@ -1,7 +1,6 @@
 "use strict";
 
-var 
-title = "",
+var title = "",
 info = "",
 cost = "",
 coordX = 0,

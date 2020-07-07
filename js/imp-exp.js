@@ -1,10 +1,11 @@
 "use strict";
 
-var 
-saveVar = {},
+var saveVar = {},
 loadVar = {},
 compressed = "",
-decompressed = ""
+decompressed = "",
+startLoad = false,
+continueLoad = false;
 
 /**
  * Compresses the current save and saves it to localStorage or the export text box
@@ -13,7 +14,7 @@ decompressed = ""
  */
 function save(saveType) {
     saveVar = {
-        version: window.version,
+        version: window.VERSION,
         trackers: window.trackers,
         resources: window.resources,
         purchases: window.purchases,
@@ -55,9 +56,12 @@ function load(loadType) {
     try {
         decompressed = LZString.decompressFromBase64(compressed);
         loadVar = JSON.parse(decompressed);
-    } catch (e) {}
+        startload = true;
+    } catch (e) {
+        startLoad = false;
+    }
 
-    if (loadVar.version) {
+    if (startLoad) {
 
         if (loadVar.version == window.version) {
             continueLoad = true;
@@ -139,19 +143,21 @@ function load(loadType) {
                                                 document.getElementById("foodContainer").classList.remove("hidden");
                                                 document.getElementById("farmerButton").classList.remove("hidden");
                                                 
-                                                if (loadVar.revealed.miners) {
+                                                if (loadVar.revealed.plans) {
 
-                                                    document.getElementById("minerButton").classList.remove("hidden");
-                                                    document.getElementById("metalNetContainer").classList.remove("hidden");
                                                     document.getElementById("metalButton").innerHTML = "Smelt Metal";
+                                                    document.getElementById("plansButton").classList.remove("hidden");
+                                                    clones.researcher.requires.food = 10;
 
-                                                    if (loadVar.revealed.plans) {
+                                                    if (loadVar.revealed.exploration) {
 
-                                                        document.getElementById("plansButton").classList.remove("hidden");
+                                                        document.getElementById("plansButton").classList.add("hidden");
+                                                        document.getElementById("battleContainer").classList.remove("hidden");
 
-                                                        if (loadVar.revealed.exploration) {
+                                                        if (loadVar.revealed.miners) {
 
-                                                            document.getElementById("plansButton").classList.add("hidden");
+                                                            document.getElementById("minerButton").classList.remove("hidden");
+                                                            document.getElementById("metalNetContainer").classList.remove("hidden");
 
                                                         }
                                                     }
@@ -178,6 +184,10 @@ function load(loadType) {
             updateResourceValues();
             updateCloneValues();
             updatePurchaseValues();
+        }
+    } else {
+        if (loadType == "import") {
+            alert("Unfortunately, your save string could not be recognized. It is possible that something is wrong on our end. Try again in a while.");
         }
     }
 }

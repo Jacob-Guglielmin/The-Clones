@@ -86,8 +86,8 @@ function resetVariables() {
             owned: 0,
             benefitType: "story",
             requires: {
-                metal: 50,
-                science: 50
+                science: 50,
+                metal: 50
             }
         },
         plans: {
@@ -119,12 +119,13 @@ function resetVariables() {
         },
 
         //Upgrades
-        test: {
+        miners: {
             owned: 0,
-            available: 3,
+            available: 0,
             benefitType: "upgrade",
             requires: {
-                science: 50
+                science: 50,
+                metal: 20
             }
         }
     },
@@ -167,9 +168,9 @@ function resetVariables() {
         upgrades: false,
         explosive: false,
         food: false,
-        miners: false,
         plans: false,
         exploration: false,
+        miners: false,
 
         //Other
         metalStorage: false
@@ -179,6 +180,7 @@ resetVariables();
 
 //These variables dont need to be reset on game reset
 var storyDisplayed = "",
+storyContainer = document.getElementById('story'),
 
 autoSaveCounter = 0,
 
@@ -234,7 +236,8 @@ function tick() {
 
     //Increment the battle counter and process a tick
     battleCounter++;
-    if (battleCounter >= 7) {
+    //DEVONLY Set to 7
+    if (battleCounter >= 3) {
         processBattleTick();
         battleCounter = 0;
     }
@@ -652,17 +655,11 @@ function reveal(revealing) {
 
         case 8:
             addStory(24);
-            document.getElementById("minerButton").classList.remove("hidden");
-            document.getElementById("metalNetContainer").classList.remove("hidden");
             document.getElementById("metalButton").innerHTML = "Smelt Metal";
             clones.researcher.requires.food = 10;
-            revealed.miners = true;
-            break;
-
-        case 9:
-            addStory(25);
             document.getElementById("plansButton").classList.remove("hidden");
             revealed.plans = true;
+            break;
     
         default:
             break;
@@ -743,13 +740,28 @@ function purchase(item, amount) {
                     break;
 
                 case "plans":
-                    addStory(26);
+                    addStory(25);
                     document.getElementById("plansButton").classList.add("hidden");
+                    document.getElementById("battleContainer").classList.remove("hidden");
                     revealed.exploration = true;
+                    break;
             
                 default:
                     break;
             }            
+        }
+
+        if (purchases[item].benefitType.includes("upgrade")) {
+            switch (item) {
+                case "miners":
+                    document.getElementById("minerButton").classList.remove("hidden");
+                    document.getElementById("metalNetContainer").classList.remove("hidden");
+                    revealed.miners = true;
+                    break;
+            
+                default:
+                    break;
+            }
         }
 
         purchases[item].owned += amount;
@@ -784,9 +796,6 @@ function hire(job, amount) {
             calculateNetResources();
             updateResourceValues();
             updateCloneValues();
-            if (!revealed.plans && job == "miner" && clones[job].total == 1) {
-                reveal(9);
-            }
         }
     }
 }
@@ -873,7 +882,6 @@ function addStory(storyChunk, hint) {
  * Scrolls to the bottom of the story
  */
 function updateScroll() {
-	var storyContainer = document.getElementById('story');
 	storyContainer.scrollTop = storyContainer.scrollHeight;
 }
 
