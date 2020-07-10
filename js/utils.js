@@ -50,6 +50,9 @@ TOOLTIPS = {
         info: "Work with your researchers to figure out what you'll need to get before you can start exploring."
     },
 
+
+    //Buildings
+
     //Storages
     crate: {
         info: "Keeps some scrap metal better organized, allowing you to store ",
@@ -75,15 +78,85 @@ TOOLTIPS = {
     },
 
     //Upgrades
+
+    //Job upgrades
+
     miners: {
         info: "Get enough tools made that your clones will be able to find and smelt metal."
+    },
+
+    speedfarming: {
+        info: "Work with your researchers to develop better planting methods, allowing your farmers to work 25% faster!"
+    },
+
+    speedmining: {
+        info: "Dig another mine into a mountain, allowing your miners to work 25% faster!"
+    },
+
+    speedscience: {
+        info: "Build your scientists a fancy lab with sciency gizmos, allowing them to work 25% faster!"
+    },
+
+    //Equipment/battle upgrades
+
+    scouts: {
+        info: "Send a few Clones ahead to let you know what's coming. With that knowledge, your Clones should be able to work through the zones on their own!"
     }
 },
-MAP_LOCATIONS = [
-    // LOCATION SCHEME: ["row, cell", row, cell, iconName, reward] - Reward can only be a resource or upgrade name
-    //TODO Add more locations
-    /* Zone 0 */[["0, 9", 0, 9, "glyphicon-question-sign", "miners"]]
-]
+MAP_LOCATIONS = {
+    //Drops which follow no pattern/unique drops
+    zones: {
+        /*  
+            LOCATION SCHEME: [row, cell, iconName, reward, title]
+            Reward can only be a resource or upgrade name.
+
+            Zones that contain no special drops can and should be omitted.
+        */
+
+        zone0: [[0, 9, "icon-fast-forward", "scouts", "Scouts"], [2, 9, "glyphicon-question-sign", "miners", "Miners"]]
+    },
+
+    //Drops that repeat after a certain number of zones
+    consistent: {
+        //Speedfarming
+        speedfarming: {
+            start: 0,
+            repeat: 1,
+            row: 6,
+            col: 9,
+            icon: "glyphicon-book"
+        },
+        //Speedmining
+        speedmining: {
+            start: 0,
+            repeat: 1,
+            row: 7,
+            col: 9,
+            icon: "glyphicon-book"
+        },
+        //Speedscience
+        speedscience: {
+            start: 1,
+            repeat: 3,
+            row: 4,
+            col: 9,
+            icon: "glyphicon-book"
+        }
+        //Generator upgrade
+    },
+
+    //Resource drops every zone
+    resources: {
+        food: {
+            amount: 10,
+            icon: "glyphicon-apple"
+        },
+        metal: {
+            amount: 10,
+            icon: "icon-cubes"
+        }
+    }
+}
 
 /**
  * Returns a random number between min and max (inclusive)

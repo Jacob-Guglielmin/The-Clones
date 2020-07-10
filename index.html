@@ -126,7 +126,9 @@
                             </div>
                             <div id="armyDamage" class="battleTextRow"></div>
                             <div class="progressBarOuter battleProgressBar">
-                                <div id="armyHealth" class="progressBarInner battleProgressBarInner"></div>
+                                <div id="armyHealthBar" class="progressBarInner battleProgressBarInner">
+                                    <span id="armyHealth" class="health"></span>
+                                </div>
                             </div>
                         </div>
                         <div id="enemyContainer">
@@ -135,14 +137,17 @@
                             </div>
                             <div id="enemyDamage" class="battleTextRow"></div>
                             <div class="progressBarOuter battleProgressBar">
-                                <div id="enemyHealth" class="progressBarInner battleProgressBarInner"></div>
+                                <div id="enemyHealthBar" class="progressBarInner battleProgressBarInner">
+                                    <span id="enemyHealth" class="health"></span>
+                                </div>
                             </div>
                         </div>
                         <div id="battleInfoContainer">
                             <div id="zoneNumber">
                                 Zone 0
                             </div>
-                            <button id="fightButton" onmousedown="fight();">Fight</button>
+                            <button id="fightButton" class="battleButton" onmousedown="fight();">Fight</button>
+                            <button id="autofightButton" class="battleButton hidden" onmousedown="toggleAutoFight();">Autofight Off</button>
                         </div>
                         <table id="battleTable">
                             <tbody id="battleGrid"></tbody>
@@ -151,7 +156,7 @@
                 </div>
                 <div id="right">
                     <div id="story"></div>
-                    <div id="purchaseContainer" class="hidden">
+                    <div id="purchaseContainer" class="">
                         <div id="purchaseTabs" class="tabs">
                             <button id="buildingsButton" class="tabButton currentTab" onmousedown="switchTabs(0)">Fabrication</button>
                             <button id="jobsButton" class="tabButton hidden" onmousedown="switchTabs(1)">Jobs</button>
@@ -182,6 +187,7 @@
                             <button id="escapeButton" class="purchase" onmouseover="tooltip('escape', event)" onmousemove="tooltip('escape', event)" onmouseout="tooltip('hide')" onmousedown="purchase('escape')">Escape</button>
                             <button id="plansButton" class="purchase hidden" onmouseover="tooltip('plans', event)" onmousemove="tooltip('plans', event)" onmouseout="tooltip('hide')" onmousedown="purchase('plans')">Plans</button>
                             <button id="minersButton" class="purchase hidden" onmouseover="tooltip('miners', event)" onmousemove="tooltip('miners', event)" onmouseout="tooltip('hide')" onmousedown="purchase('miners')">Miners</button>
+                            <button id="scoutsButton" class="purchase hidden" onmouseover="tooltip('scouts', event)" onmousemove="tooltip('scouts', event)" onmouseout="tooltip('hide')" onmousedown="purchase('scouts')">Scouts</button>
                         </div>
                         <div id="equipment" class="hidden"></div>
                     </div>

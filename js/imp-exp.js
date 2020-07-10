@@ -158,7 +158,14 @@ function load(loadType) {
 
                                                             document.getElementById("minerButton").classList.remove("hidden");
                                                             document.getElementById("metalNetContainer").classList.remove("hidden");
+                                                            document.getElementById("minersButton").classList.add("hidden");
 
+                                                            if (loadVar.revealed.scouts) {
+
+                                                                document.getElementById("autofightButton").classList.remove("hidden");
+                                                                document.getElementById("scoutsButton").classList.add("hidden");
+                                                                
+                                                            }
                                                         }
                                                     }
                                                 }

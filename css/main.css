@@ -122,7 +122,7 @@ textarea {
     margin-bottom: 5px;
 }
 
-#armyHealth {
+#armyHealthBar {
     width: 0;
 }
 
@@ -132,14 +132,14 @@ textarea {
     margin: 0;
 }
 
-#enemyHealth {
+#enemyHealthBar {
     width: 0;
 }
 
 #battleInfoContainer {
     position: absolute;
     box-sizing: border-box;
-    width: calc(13.5vw - 17px);
+    width: calc(10vw - 17px);
     top: calc(10.7vh + 10.5px);
 }
 
@@ -150,22 +150,22 @@ textarea {
     width: 100%;
     height: 7vh;
     border: 1px solid #EEE;
-    margin-bottom: 5px;
+    margin-bottom: 1vh;
 }
 
-#fightButton {
-    box-sizing: border-box;
-    display: inline-block;
-    font-size: 2.2vh;
-    width: 100%;
-    height: 4vh;
-    padding: 0;
+#autofightButton {
+    background-color: #f11;
+}
+
+#autofightButton:hover {
+    color: #eee;
+    border: 1px solid #999;
 }
 
 #battleTable {
     border-collapse: collapse;
     position: absolute;
-    left: 13vw;
+    left: 9.5vw;
     top: calc(10.7vh + 10.5px);
 }
 
@@ -267,10 +267,41 @@ textarea {
 
 .battleProgressBar {
     width: 100%;
+    text-align: center;
+    vertical-align: middle;
+    position: relative;
 }
 
 .battleProgressBarInner {
     transition: width 0.5s ease;
+    float: left;
+    text-align: center;
+}
+
+.battleButton {
+    box-sizing: content-box;
+    display: inline-block;
+    font-size: 2.2vh;
+    width: 100%;
+    height: 4vh;
+    padding: 0;
+    margin-bottom: 1vh;
+    border-radius: 5px;
+}
+
+.health {
+    box-sizing: border-box;
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: 100%;
+    color: black;
+    font-size: 3vh;
+    line-height: 4vh;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    z-index: 5;
 }
 
 .battleTextRow {
@@ -281,9 +312,11 @@ textarea {
 .battleCell {
     box-sizing: border-box;
     padding: 0;
-    width: 3.2vw;
+    width: 5vw;
     height: calc(3.82vh - 1px);
     border: 1.5px solid #EEE;
+    background-color: #999;
+    color: black;
 }
 
 .battleCellOn {

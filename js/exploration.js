@@ -5,18 +5,18 @@ row = 0,
 cell = 0,
 army = {
     health: 0,
-    maxHealth: 10,
+    maxHealth: 100,
     attack: undefined,
-    averageAttack: 3,
+    averageAttack: 10,
     minAttack: undefined,
     maxAttack: undefined,
     clones: 5
 },
 enemy = {
-    health: 10,
-    maxHealth: 10,
+    health: 0,
+    maxHealth: 1,
     attack: undefined,
-    averageAttack: 2,
+    averageAttack: undefined,
     minAttack: undefined,
     maxAttack: undefined,
     fast: false
@@ -24,8 +24,10 @@ enemy = {
 fighting = false,
 autoFight = false,
 battleGrid = document.getElementById("battleGrid"),
-armyHealthBar = document.getElementById("armyHealth"),
-enemyHealthBar = document.getElementById("enemyHealth"),
+armyHealthBar = document.getElementById("armyHealthBar"),
+armyHealthDisplay = document.getElementById("armyHealth"),
+enemyHealthBar = document.getElementById("enemyHealthBar"),
+enemyHealthDisplay = document.getElementById("enemyHealth"),
 ready = false;
 
 /**
@@ -33,8 +35,10 @@ ready = false;
  */
 function init() {
     populateGrid();
+    createEnemy();
     calculateDamage(true);
     calculateDamage(false);
+    updateBattleValues();
     ready = true;
 }
 
@@ -43,6 +47,10 @@ function init() {
  */
 function updateBattleValues() {
     document.getElementById("zoneNumber").innerHTML = "Zone " + zone;
+    armyHealthDisplay.innerHTML = army.health + "/" + army.maxHealth;
+    enemyHealthDisplay.innerHTML = enemy.health + "/" + enemy.maxHealth;
+    armyHealthBar.style.width = ((army.health / army.maxHealth) * 100) + "%";
+    enemyHealthBar.style.width = ((enemy.health / enemy.maxHealth) * 100) + "%";
 }
 
 /**
@@ -84,8 +92,7 @@ function processBattleTick() {
             army.health = army.maxHealth;
         }
 
-        armyHealthBar.style.width = ((army.health / army.maxHealth) * 100) + "%";
-        enemyHealthBar.style.width = ((enemy.health / enemy.maxHealth) * 100) + "%";
+        updateBattleValues();
     }
 }
 
@@ -115,7 +122,7 @@ function nextCell() {
     battleGrid.children[row].children[cell].classList.add("battleCellOn");
 
     //Create an enemy
-    enemy.health = enemy.maxHealth;
+    createEnemy();
     calculateDamage(false);
 }
 
@@ -148,15 +155,56 @@ function populateGrid() {
  * Adds all glyphicons and rewards to the correct cells in the grid
  */
 function addLocations() {
-    for (let i = 0; i < MAP_LOCATIONS[zone].length; i++) {
-        let icon = document.createElement("span");
-        console.log(MAP_LOCATIONS[zone][i][3]);
-        if (MAP_LOCATIONS[zone][i][3].includes("glyphicon")) {
-            icon.classList.add("glyphicon", MAP_LOCATIONS[zone][i][3]);
-        } else {
-            icon.classList.add("icomoon", MAP_LOCATIONS[zone][i][3]);
+    //Add important drops that have a specific location
+    if (MAP_LOCATIONS.zones["zone" + zone]) {
+        for (let i = 0; i < MAP_LOCATIONS.zones["zone" + zone].length; i++) {
+            let icon = document.createElement("span");
+            if (MAP_LOCATIONS.zones["zone" + zone][i][2].includes("glyphicon")) {
+                icon.classList.add("glyphicon", MAP_LOCATIONS.zones["zone" + zone][i][2]);
+            } else {
+                icon.classList.add("icomoon", MAP_LOCATIONS.zones["zone" + zone][i][2]);
+            }
+            icon.title = MAP_LOCATIONS.zones["zone" + zone][i][4];
+            battleGrid.children[MAP_LOCATIONS.zones["zone" + zone][i][0]].children[MAP_LOCATIONS.zones["zone" + zone][i][1]].appendChild(icon);
         }
-        battleGrid.children[MAP_LOCATIONS[zone][i][1]].children[MAP_LOCATIONS[zone][i][2]].appendChild(icon);
+    }
+
+    //Add important drops that happen every zone
+    for (let dropName in MAP_LOCATIONS.consistent) {
+        if ((MAP_LOCATIONS.consistent[dropName].start) <= zone && ((zone - MAP_LOCATIONS.consistent[dropName].start) % MAP_LOCATIONS.consistent[dropName].repeat) == 0) {
+            let icon = document.createElement("span");
+            if (MAP_LOCATIONS.consistent[dropName].icon.includes("glyphicon")) {
+                icon.classList.add("glyphicon", MAP_LOCATIONS.consistent[dropName].icon);
+            } else {
+                icon.classList.add("icomoon", MAP_LOCATIONS.consistent[dropName].icon);
+            }
+            icon.title = dropName.charAt(0).toUpperCase() + dropName.slice(1);
+            battleGrid.children[MAP_LOCATIONS.consistent[dropName].row].children[MAP_LOCATIONS.consistent[dropName].col].appendChild(icon);
+        }
+    }
+
+    //Add resource drops
+    for (let resource in MAP_LOCATIONS.resources) {
+        for (let i = 0; i < MAP_LOCATIONS.resources[resource].amount; i++) {            
+            let row = undefined;
+            let col = undefined;
+            while (true) {
+                let location = random(0, 99);
+                row = Math.floor(location / 10);
+                col = location - (row * 10);
+                if (!battleGrid.children[row].children[col].firstChild) {
+                    break;
+                }
+            }
+            let icon = document.createElement("span");
+            if (MAP_LOCATIONS.resources[resource].icon.includes("glyphicon")) {
+                icon.classList.add("glyphicon", MAP_LOCATIONS.resources[resource].icon);
+            } else {
+                icon.classList.add("icomoon", MAP_LOCATIONS.resources[resource].icon);
+            }
+            icon.title = resource.charAt(0).toUpperCase() + resource.slice(1);
+            battleGrid.children[row].children[col].appendChild(icon);
+        }
     }
 }
 
@@ -164,21 +212,63 @@ function addLocations() {
  * Give the reward (if any) for the cell
  */
 function giveRewards() {
-    for (let i = 0; i < MAP_LOCATIONS[zone].length; i++) {
-        if (MAP_LOCATIONS[zone][i][0].includes(row + ", " + cell)) {
-            //Check if an upgrade should be made available
-            if (window.purchases.hasOwnProperty(MAP_LOCATIONS[zone][i][4])) {
-                window.purchases[MAP_LOCATIONS[zone][i][4]].available++;
-                window.updatePurchaseValues();
-                break;
-
-            //Check if a resource should be given
-            } else if (window.resources.hasOwnProperty(MAP_LOCATIONS[zone][i][4])) {
-                window.resources[MAP_LOCATIONS[zone][i][4]].total += 10;
-                break;
+    let rewardGiven = false;
+    //Check if a unique upgrade should be made available
+    if (MAP_LOCATIONS.zones["zone" + zone]) {
+        for (let i = 0; i < MAP_LOCATIONS.zones["zone" + zone].length; i++) {
+            if (MAP_LOCATIONS.zones["zone" + zone][i][0] == row && MAP_LOCATIONS.zones["zone" + zone][i][1] == cell) {
+                if (window.purchases.hasOwnProperty(MAP_LOCATIONS.zones["zone" + zone][i][3])) {
+                    window.purchases[MAP_LOCATIONS.zones["zone" + zone][i][3]].available++;
+                    window.updatePurchaseValues();
+                    rewardGiven = true;
+                    break;
+                }
             }
         }
     }
+
+    //Check if a repeating upgrade should be made available
+    if (!rewardGiven && battleGrid.children[row].children[cell].firstChild && window.purchases.hasOwnProperty(battleGrid.children[row].children[cell].children[0].title.charAt(0).toLowerCase() + battleGrid.children[row].children[cell].children[0].title.slice(1))) {
+        window.purchases[battleGrid.children[row].children[cell].children[0].title.charAt(0).toLowerCase() + battleGrid.children[row].children[cell].children[0].title.slice(1)].available++;
+    }
+
+    //Check if a resource should be given
+    else if (!rewardGiven && battleGrid.children[row].children[cell].firstChild && window.resources.hasOwnProperty(battleGrid.children[row].children[cell].children[0].title.charAt(0).toLowerCase() + battleGrid.children[row].children[cell].children[0].title.slice(1))) {
+        window.resources[battleGrid.children[row].children[cell].children[0].title.charAt(0).toLowerCase() + battleGrid.children[row].children[cell].children[0].title.slice(1)].total += 10;
+    }
+}
+
+/**
+ * Calculates the enemy attack and health
+ */
+function createEnemy() {
+    //Calculate average attack
+    let dmg = 50 * Math.sqrt(zone + 1) * Math.pow(3.25, ((zone + 1) / 2));
+    dmg -= 10;
+    if (zone == 0) {
+        dmg *= 0.3;
+        dmg = (dmg * 0.25) + ((dmg * 0.75) * (((row * 10) + cell + 1) / 100));
+    } else if (zone == 1) {
+        dmg *= 0.5;
+        dmg = (dmg * 0.3) + ((dmg * 0.75) * (((row * 10) + cell + 1) / 100));
+    } else {
+        dmg = (dmg * 0.4) + ((dmg * 0.7) * (((row * 10) + cell + 1) / 100));
+    }
+    console.log("Damage: " + Math.floor(dmg));
+    enemy.averageAttack = Math.floor(dmg);
+
+    //Calculate health
+    let hp = 130 * Math.sqrt(zone + 1) * Math.pow(3.25, ((zone + 1) / 2));
+    hp -= 110;
+    if (zone < 10) {
+        hp *= 0.6;
+        hp = (hp * 0.25) + ((hp * 0.75) * (((row * 10) + cell + 1) / 100));
+    } else {
+        hp = (hp * 0.4) + ((hp * 0.4) * (((row * 10) + cell + 1) / 110)); 
+    }
+    console.log("Health: " + Math.floor(hp));
+    enemy.maxHealth = Math.floor(hp);
+    enemy.health = enemy.maxHealth;
 }
 
 /**
@@ -201,6 +291,20 @@ function calculateDamage(isArmy) {
         enemy.maxAttack = Math.ceil(enemy.averageAttack + (enemy.averageAttack * defaultFluctuation));
 
         document.getElementById("enemyDamage").innerHTML = enemy.minAttack + "-" + enemy.maxAttack + " Damage";
+    }
+}
+
+/**
+ * Toggles the autofight setting on and off
+ */
+function toggleAutoFight() {
+    autoFight = !autoFight;
+    if (autoFight) {
+        document.getElementById("autofightButton").style.backgroundColor = "#090";
+        document.getElementById("autofightButton").innerHTML = "Autofight On";
+    } else {
+        document.getElementById("autofightButton").style.backgroundColor = "#f11";
+        document.getElementById("autofightButton").innerHTML = "Autofight Off";
     }
 }
 

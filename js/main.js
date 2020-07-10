@@ -63,28 +63,28 @@ function resetVariables() {
         //Story-based purchases
         generator: {
             owned: 0,
-            benefitType: "story",
+            benefitType: "story once",
             requires: {
                 metal: 50
             }
         },
         spear: {
             owned: 0,
-            benefitType: "story",
+            benefitType: "story once",
             requires: {
                 metal: 20
             }
         },
         escape: {
             owned: 0,
-            benefitType: "story",
+            benefitType: "story once",
             requires: {
                 science: 75
             }
         },
         explosive: {
             owned: 0,
-            benefitType: "story",
+            benefitType: "story once",
             requires: {
                 science: 50,
                 metal: 50
@@ -92,13 +92,16 @@ function resetVariables() {
         },
         plans: {
             owned: 0,
-            benefitType: "story",
+            benefitType: "story once",
             requires: {
                 science: 100,
                 food: 20,
                 metal: 20,
             }
         },
+
+
+        //Buildings
 
         //Storages
         crate: {
@@ -118,7 +121,10 @@ function resetVariables() {
             }
         },
 
+
         //Upgrades
+
+        //Job upgrades
         miners: {
             owned: 0,
             available: 0,
@@ -126,6 +132,17 @@ function resetVariables() {
             requires: {
                 science: 50,
                 metal: 20
+            }
+        },
+
+        //Equipment/battle upgrades
+        scouts: {
+            owned: 0,
+            available: 0,
+            benefitType: "upgrade once",
+            requires: {
+                science: 100,
+                food: 50
             }
         }
     },
@@ -171,6 +188,7 @@ function resetVariables() {
         plans: false,
         exploration: false,
         miners: false,
+        autoFight: false,
 
         //Other
         metalStorage: false
@@ -229,7 +247,7 @@ function tick() {
         } else if (resources[resource].total < resources[resource].max) {
             resources[resource].total = resources[resource].max;
         }
-        if (!revealed.cloningStory && resource == "science" && resources[resource].total >= 100) {
+        if (!revealed.cloningStory && resource == "science" && resources[resource].total >= 50) {
             reveal(5);
         }
     }
@@ -311,7 +329,7 @@ function updatePurchaseValues() {
         
         //Update button text
         let buttonText = item.charAt(0).toUpperCase() + item.slice(1);
-        if (purchases[item].benefitType != "story") {
+        if (!purchases[item].benefitType.includes("once")) {
             buttonText += "<br>" + purchases[item].owned;
         }
         document.getElementById(item + "Button").innerHTML = buttonText;
@@ -381,7 +399,7 @@ function incrementResource(resource) {
                 reveal(7);
             }
         }
-        if (!revealed.cloning && resource == "science" && resources[resource].total >= 75) {
+        if (!revealed.cloningStory && resource == "science" && resources[resource].total >= 50) {
             reveal(5);
         } else if (!revealed.miners && resource == "food" && resources[resource].total >= 50) {
             reveal(8);
@@ -756,9 +774,15 @@ function purchase(item, amount) {
                 case "miners":
                     document.getElementById("minerButton").classList.remove("hidden");
                     document.getElementById("metalNetContainer").classList.remove("hidden");
+                    document.getElementById("minersButton").classList.add("hidden");
                     revealed.miners = true;
                     break;
-            
+
+                case "scouts":
+                    document.getElementById("autofightButton").classList.remove("hidden");
+                    document.getElementById("scoutsButton").classList.add("hidden");
+                    revealed.autoFight = true;
+
                 default:
                     break;
             }
