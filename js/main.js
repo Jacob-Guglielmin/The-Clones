@@ -128,10 +128,37 @@ function resetVariables() {
         miners: {
             owned: 0,
             available: 0,
-            benefitType: "upgrade",
+            benefitType: "upgrade once",
             requires: {
                 science: 50,
                 metal: 20
+            }
+        },
+        speedfarming: {
+            owned: 0,
+            available: 0,
+            benefitType: "upgrade",
+            requires: {
+                science: 50,
+                food: 50
+            }
+        },
+        speedmining: {
+            owned: 0,
+            available: 0,
+            benefitType: "upgrade",
+            requires: {
+                science: 50,
+                metal: 50
+            }
+        },
+        speedscience: {
+            owned: 0,
+            available: 0,
+            benefitType: "upgrade",
+            requires: {
+                science: 100,
+                food: 20
             }
         },
 

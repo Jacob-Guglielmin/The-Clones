@@ -160,7 +160,7 @@
                         <div id="purchaseTabs" class="tabs">
                             <button id="buildingsButton" class="tabButton currentTab" onmousedown="switchTabs(0)">Fabrication</button>
                             <button id="jobsButton" class="tabButton hidden" onmousedown="switchTabs(1)">Jobs</button>
-                            <button id="upgradesButton" class="tabButton hidden" onmousedown="switchTabs(2)">Research</button>
+                            <button id="upgradesButton" class="tabButton" onmousedown="switchTabs(2)">Research</button>
                             <button id="equipmentButton" class="tabButton hidden" onmousedown="switchTabs(3)">Equipment</button>
                         </div>
                         <div id="buildings">
@@ -188,6 +188,9 @@
                             <button id="plansButton" class="purchase hidden" onmouseover="tooltip('plans', event)" onmousemove="tooltip('plans', event)" onmouseout="tooltip('hide')" onmousedown="purchase('plans')">Plans</button>
                             <button id="minersButton" class="purchase hidden" onmouseover="tooltip('miners', event)" onmousemove="tooltip('miners', event)" onmouseout="tooltip('hide')" onmousedown="purchase('miners')">Miners</button>
                             <button id="scoutsButton" class="purchase hidden" onmouseover="tooltip('scouts', event)" onmousemove="tooltip('scouts', event)" onmouseout="tooltip('hide')" onmousedown="purchase('scouts')">Scouts</button>
+                            <button id="speedfarmingButton" class="purchase hidden" onmouseover="tooltip('speedfarming', event)" onmousemove="tooltip('speedfarming', event)" onmouseout="tooltip('hide')" onmousedown="purchase('speedfarming')">Speedfarming<br>0</button>
+                            <button id="speedminingButton" class="purchase hidden" onmouseover="tooltip('speedmining', event)" onmousemove="tooltip('speedmining', event)" onmouseout="tooltip('hide')" onmousedown="purchase('speedmining')">Speedmining<br>0</button>
+                            <button id="speedscienceButton" class="purchase hidden" onmouseover="tooltip('speedscience', event)" onmousemove="tooltip('speedscience', event)" onmouseout="tooltip('hide')" onmousedown="purchase('speedscience')">Speedscience<br>0</button>
                         </div>
                         <div id="equipment" class="hidden"></div>
                     </div>
