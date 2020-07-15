@@ -171,6 +171,16 @@ function resetVariables() {
                 science: 100,
                 food: 50
             }
+        },
+        organization: {
+            owned: 0,
+            available: 0,
+            benefitType: "upgrade",
+            requires: {
+                science: 20,
+                food: 50,
+                metal: 50
+            }
         }
     },
     clones = {
@@ -472,6 +482,8 @@ function makeClone() {
  */
 function fight() {
     if (!fighting && clones.available >= army.clones) {
+        calculateArmyStats();
+        updateBattleValues();
         if (zone == 0 && row == 0 && cell == 0) {
             battleGrid.children[0].children[0].classList.add("battleCellOn");
         }
@@ -809,6 +821,9 @@ function purchase(item, amount) {
                     document.getElementById("autofightButton").classList.remove("hidden");
                     document.getElementById("scoutsButton").classList.add("hidden");
                     revealed.autoFight = true;
+
+                case "organization":
+                    army.clones = Math.ceil(army.clones * 1.25);
 
                 default:
                     break;

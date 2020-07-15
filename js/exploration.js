@@ -5,12 +5,12 @@ row = 0,
 cell = 0,
 army = {
     health: 0,
-    maxHealth: 100,
+    maxHealth: 50,
     attack: undefined,
-    averageAttack: 10,
+    averageAttack: undefined,
     minAttack: undefined,
     maxAttack: undefined,
-    clones: 5
+    clones: 1
 },
 enemy = {
     health: 0,
@@ -35,8 +35,9 @@ ready = false;
  */
 function init() {
     populateGrid();
-    createEnemy();
+    calculateArmyStats();
     calculateDamage(true);
+    createEnemy();
     calculateDamage(false);
     updateBattleValues();
     ready = true;
@@ -46,6 +47,7 @@ function init() {
  * Updates the information in the battle screen
  */
 function updateBattleValues() {
+    document.getElementById("armySize").innerHTML = army.clones + " Clone" + (army.clones > 1 ? "s" : "");
     document.getElementById("zoneNumber").innerHTML = "Zone " + zone;
     armyHealthDisplay.innerHTML = army.health + "/" + army.maxHealth;
     enemyHealthDisplay.innerHTML = enemy.health + "/" + enemy.maxHealth;
@@ -85,13 +87,13 @@ function processBattleTick() {
                 }
             }
             if (autoFight && !fighting && window.clones.available >= army.clones) {
+                calculateArmyStats();
                 window.clones.available -= army.clones;
                 fighting = true;
             }
         } else {
             army.health = army.maxHealth;
         }
-
         updateBattleValues();
     }
 }
@@ -239,6 +241,19 @@ function giveRewards() {
 }
 
 /**
+ * Calculates the army attack and health
+ */
+function calculateArmyStats() {
+    let dmg = 6;
+    dmg *= army.clones;
+    army.averageAttack = Math.ceil(dmg);
+
+    let mhp = 50;
+    mhp *= army.clones;
+    army.maxHealth = Math.ceil(mhp);
+}
+
+/**
  * Calculates the enemy attack and health
  */
 function createEnemy() {
@@ -254,7 +269,6 @@ function createEnemy() {
     } else {
         dmg = (dmg * 0.4) + ((dmg * 0.7) * (((row * 10) + cell + 1) / 100));
     }
-    console.log("Damage: " + Math.floor(dmg));
     enemy.averageAttack = Math.floor(dmg);
 
     //Calculate health
@@ -266,7 +280,6 @@ function createEnemy() {
     } else {
         hp = (hp * 0.4) + ((hp * 0.4) * (((row * 10) + cell + 1) / 110)); 
     }
-    console.log("Health: " + Math.floor(hp));
     enemy.maxHealth = Math.floor(hp);
     enemy.health = enemy.maxHealth;
 }

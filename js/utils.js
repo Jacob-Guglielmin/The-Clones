@@ -101,6 +101,10 @@ TOOLTIPS = {
 
     scouts: {
         info: "Send a few Clones ahead to let you know what's coming. With that knowledge, your Clones should be able to work through the zones on their own!"
+    },
+
+    organization: {
+        info: "This will allow you to learn about better battle strategies. Fighting will require 25% more Clones (rounded up), but with each new Clone, your army's attack and health will grow."
     }
 },
 MAP_LOCATIONS = {
@@ -118,6 +122,14 @@ MAP_LOCATIONS = {
 
     //Drops that repeat after a certain number of zones
     consistent: {
+        //Organization
+        organization: {
+            start: 0,
+            repeat: 1,
+            row: 9,
+            col: 9,
+            icon: "glyphicon-book"
+        },
         //Speedfarming
         speedfarming: {
             start: 0,
@@ -161,11 +173,63 @@ MAP_LOCATIONS = {
 /**
  * Returns a random number between min and max (inclusive)
  * 
- * @param min lower bound for number
- * @param max upper bound for number
+ * @param min Lower bound for number
+ * @param max Upper bound for number
  */
 function random(min, max) {
     return Math.floor(
         Math.random() * (max - min + 1) + min
     );
+}
+
+/**
+ * Converts a number to something readable (adds a suffix)
+ * 
+ * @param number The number to prettify
+ */
+function prettify(number) {
+    let base = Math.floor(Math.log(number)/Math.log(1000));
+    if (base <= 0 && !(number >= 999.5)) {
+        return prettifySmall(number);
+    }
+
+    number /= Math.pow(1000, base)
+
+    console.log(number);
+
+    //Prevent errors due to rounding
+    if (number >= 999.5) {
+        number /= 1000;
+        base++;
+    }
+    let suffix;
+    let suffixes = [
+        "K", "M", "B", "T", "Qa", "Qi", "Sx", "Sp", "Oc", "No", "Dc", "Ud",
+        "Dd", "Td", "Qad", "Qid", "Sxd", "Spd", "Od", "Nd", "V", "Uv", "Dv",
+        "Tv", "Qav", "Qiv", "Sxv", "Spv", "Ov", "Nv", "Tg", "Utg", "Dtg", "Ttg",
+        "Qatg", "Qitg", "Sxtg", "Sptg", "Otg", "Ntg", "Qaa", "Uqa", "Dqa", "Tqa",
+        "Qaqa", "Qiqa", "Sxqa", "Spqa", "Oqa", "Nqa", "Qia", "Uqi", "Dqi",
+        "Tqi", "Qaqi", "Qiqi", "Sxqi", "Spqi", "Oqi", "Nqi", "Sxa", "Usx",
+        "Dsx", "Tsx", "Qasx", "Qisx", "Sxsx", "Spsx", "Osx", "Nsx", "Spa",
+        "Usp", "Dsp", "Tsp", "Qasp", "Qisp", "Sxsp", "Spsp", "Osp", "Nsp",
+        "Og", "Uog", "Dog", "Tog", "Qaog", "Qiog", "Sxog", "Spog", "Oog",
+        "Nog", "Na", "Un", "Dn", "Tn", "Qan", "Qin", "Sxn", "Spn", "On",
+        "Nn", "Ct", "Uc"
+    ];
+    suffix = suffixes[base - 1];
+
+    return prettifySmall(number) + suffix;
+}
+
+/**
+ * Converts a small number to a number with an acceptable number of decimal places
+ * 
+ * @param number The number to prettify
+ */
+function prettifySmall(number) {
+    let floor = Math.floor(number);
+    if (number == floor) {
+        return number;
+    }
+    return number.toFixed(3 - floor.toString().length);
 }

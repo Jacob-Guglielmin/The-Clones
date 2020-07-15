@@ -21,6 +21,12 @@ function save(saveType) {
         clones: window.clones,
         revealed: window.revealed,
         actionText: document.getElementById("actionButton").innerHTML,
+        zone: window.zone,
+        row: window.row,
+        cell: window.cell,
+        army: window.army,
+        enemy: window.enemy,
+        autoFight: window.autoFight
     }
 
     decompressed = JSON.stringify(saveVar);
@@ -93,11 +99,21 @@ function load(loadType) {
             document.getElementById("cloningProgressBar").style.width = (Math.floor(loadVar.trackers.cloning.counter/loadVar.trackers.cloning.required*100))+"%";
 
             //Write variables
+
+            //main.js
             window.trackers = loadVar.trackers;
             window.resources = loadVar.resources;
             window.purchases = loadVar.purchases;
             window.clones = loadVar.clones;
             window.revealed = loadVar.revealed;
+
+            //exploration.js
+            window.zone = loadVar.zone;
+            window.row = loadVar.row;
+            window.cell = loadVar.cell;
+            window.army = loadVar.army;
+            window.enemy = loadVar.enemy;
+            window.autoFight = loadVar.autoFight;
 
             //Story-based unlocks
             if (loadVar.revealed.metal) {
