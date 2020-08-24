@@ -304,6 +304,9 @@ function tick() {
         if (!revealed.cloningStory && resource == "science" && resources[resource].total >= 50) {
             reveal(5);
         }
+        if (!revealed.miners && resource == "food" && resources[resource].total >= 50) {
+            reveal(8);
+        }
     }
 
     //Increment the battle counter and process a tick
