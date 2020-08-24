@@ -51,6 +51,10 @@ h3 {
     display: inline-block;
 }
 
+textarea {
+    resize: none;
+}
+
 #tooltip {
     position: absolute;
     z-index: 10;
@@ -97,17 +101,116 @@ h3 {
     height: 25.3vh;
 }
 
-/* TODO Set this height? width? better */
-#clonesContainer {
+#battleContainer {
+    box-sizing: border-box;
     position: relative;
     left: 3vw;
-    top: 10vh;
+    top: 9.45vh;
     width: 45.5vw;
-    height: 49.55vh;
+    height: 50vh;
+    border: 1px solid #EEE;
+    background-color: #35372F;
+    padding: 5px;
+    margin: 0;
+}
+
+#armyContainer {
+    float: left;
+    width: calc(50% - 5px);
+    margin: 0;
+    margin-right: 10px;
+    margin-bottom: 5px;
+}
+
+#armyHealthBar {
+    width: 0;
+}
+
+#enemyContainer {
+    float: right;
+    width: calc(50% - 5px);
+    margin: 0;
+}
+
+#enemyHealthBar {
+    width: 0;
+}
+
+#battleInfoContainer {
+    position: absolute;
+    box-sizing: border-box;
+    width: calc(10vw - 17px);
+    top: calc(10.7vh + 10.5px);
+}
+
+#zoneNumber {
+    display: inline-block;
+    text-align: center;
+    line-height: 7vh;
+    width: 100%;
+    height: 7vh;
+    border: 1px solid #EEE;
+    margin-bottom: 1vh;
+}
+
+#autofightButton {
+    background-color: #f11;
+}
+
+#autofightButton:hover {
+    color: #eee;
+    border: 1px solid #999;
+}
+
+#battleTable {
+    table-layout: fixed;
+    border-collapse: collapse;
+    position: absolute;
+    left: 9.5vw;
+    top: calc(10.7vh + 10.5px);
+    width: calc(45.5vw - 9.5vw - 1px);
+    height: calc(50vh - (10.7vh + 10.5px) - 1px);
+}
+
+#battleGrid>tr>td {
+    text-align: center;
+    font-size: 2vh;
+    vertical-align: middle;
+    width: 10%;
+    height: 10%;
+}
+
+#right {
+    top: 10vh;
+    width: 50vw;
+    height: 90vh;
+    float: left;
+}
+
+
+#story {
+    position: relative;
+    box-sizing: border-box;
+    margin-left: 1.5vw;
+    top: 1vh;
+    height: 36.7vh;
+    width: calc(45.5vw + 2px);
+    border: 1px solid #EEE;
+    padding: 10px;
+    font-size: 2.5vh;
+    overflow-y: auto;
+}
+
+#purchaseContainer {
+    position: relative;
+    width: 45.5vw;
+    height: 43vh;
     border: 1px solid #EEE;
     background-color: #35372F;
     padding: 0;
     margin: 0;
+    margin-top: 5vh;
+    margin-left: 1.5vw;
 }
 
 #totalClonesContainer {
@@ -124,44 +227,11 @@ h3 {
     padding-bottom: 0;
 }
 
-#right {
-    top: 10vh;
-    width: 50vw;
-    height: 90vh;
-    float: left;
-}
-
-
-#story {
-    position: relative;
-    left: 1.5vw;
-    top: 5vh;
-    height: 32vh;
-    width: 43.9vw;
-    border: 1px solid #EEE;
-    padding: 10px;
-    font-size: 2.5vh;
-    overflow-y: auto;
-}
-
-#purchaseContainer {
-    position: relative;
-    left: 1.5vw;
-    top: 10vh;
-    width: calc(43.9vw + 20px);
-    height: 39vh;
-    border: 1px solid #EEE;
-    background-color: #35372F;
-    padding: 0;
-    margin: 0;
-}
-
 .headerButton {
     height: 7vh;
-    width: 10vw;
+    width: calc(50% - 5px);
     margin-top: 1vh;
-    margin-left: 1vh;
-    margin-right: 0;
+    margin-right: 5px;
     float: left;
 }
 
@@ -170,7 +240,7 @@ h3 {
     width: auto;
     float: right;
     border: none;
-    padding: none;
+    padding: 0;
     margin-top: 3vh;
 }
 
@@ -180,7 +250,6 @@ h3 {
 }
 
 .progressBarOuter {
-    width: 25vw;
     height: 4vh;
     border-radius: 1vh;
     background-color: #BBB;
@@ -192,29 +261,107 @@ h3 {
     border-bottom-left-radius: 1vh;
     border-right: 2px solid #000;
     background-color: #2B0;
+}
+
+.resourceProgressBar {
+    width: 25vw;
+}
+
+.resourceProgressBarInner {
     transition: width 0.2s ease;
+}
+
+.battleProgressBar {
+    width: 100%;
+    text-align: center;
+    vertical-align: middle;
+    position: relative;
+}
+
+.battleProgressBarInner {
+    transition: width 0.5s ease;
+    float: left;
+    text-align: center;
+}
+
+.battleButton {
+    box-sizing: content-box;
+    display: inline-block;
+    font-size: 2.2vh;
+    width: 100%;
+    height: 4vh;
+    padding: 0;
+    margin-bottom: 1vh;
+    border-radius: 5px;
+}
+
+.health {
+    box-sizing: border-box;
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: 100%;
+    color: black;
+    font-size: 3vh;
+    line-height: 4vh;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    z-index: 5;
+}
+
+.battleTextRow {
+    width: 100%;
+    height: 3.5vh;
+}
+
+.battleCell {
+    box-sizing: border-box;
+    padding: 0;
+    border: 1.5px solid #EEE;
+    background-color: #999;
+    color: black;
+}
+
+.battleCellOn {
+    background-color: #2B0;
+}
+
+.battleCellBeaten {
+    background-color: #160;
 }
 
 .tabs {
     position: relative;
     left: 0px;
     top: 0px;
-    width: 45.5vw;
+    width: 100%;
     height: 6vh;
     background-color: #272823;
+    border-bottom: 1px solid #EEE;
 }
 
 .tabButton {
     position: relative;
-    width: 50%;
-    height: inherit;
+    width: 25%;
+    height: 100%;
     float: left;
     margin-right: 0;
-    border: 1px solid #EEE !important;
+    border: 1px solid #EEE;
+    border-top: 0;
+    border-bottom: 0;
+}
+
+.tabButton:hover {
+    color: #999;
+    border: 1px solid #EEE;
+    border-top: 0;
+    border-bottom: 0;
 }
 
 .currentTab {
-    background-color: #35372F !important;
+    background-color: #35372F;
+    height: inherit;
 }
 
 .purchase {
@@ -224,7 +371,7 @@ h3 {
     font-size: 2.5vh;
     line-height: 3.75vh;
     margin-left: 1.1vw;
-    margin-top: 20px;
+    margin-top: 1.1vw;
     margin-right: 0px;
     float: left;
 }

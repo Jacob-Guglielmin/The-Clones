@@ -1,8 +1,11 @@
-var 
-saveVar = {},
+"use strict";
+
+var saveVar = {},
 loadVar = {},
 compressed = "",
-decompressed = ""
+decompressed = "",
+startLoad = false,
+continueLoad = false;
 
 /**
  * Compresses the current save and saves it to localStorage or the export text box
@@ -11,13 +14,19 @@ decompressed = ""
  */
 function save(saveType) {
     saveVar = {
-        version: window.version,
+        version: window.VERSION,
         trackers: window.trackers,
         resources: window.resources,
         purchases: window.purchases,
         clones: window.clones,
         revealed: window.revealed,
         actionText: document.getElementById("actionButton").innerHTML,
+        zone: window.zone,
+        row: window.row,
+        cell: window.cell,
+        army: window.army,
+        enemy: window.enemy,
+        autoFight: window.autoFight
     }
 
     decompressed = JSON.stringify(saveVar);
@@ -25,9 +34,9 @@ function save(saveType) {
 
     if (saveType == "localStorage") {
         //DEVONLY Enable localStorage
-        /* try {
-            localStorage.setItem("clonesSave", compressed);
-        } catch (e) {} */
+        try {
+            //localStorage.setItem("clonesSave", compressed);
+        } catch (e) {}
     } else if (saveType == "export") {
         document.getElementById("exportBox").value = compressed;
         setTimeout(() => {
@@ -53,9 +62,12 @@ function load(loadType) {
     try {
         decompressed = LZString.decompressFromBase64(compressed);
         loadVar = JSON.parse(decompressed);
-    } catch (e) {}
+        startload = true;
+    } catch (e) {
+        startLoad = false;
+    }
 
-    if (loadVar.version) {
+    if (startLoad) {
 
         if (loadVar.version == window.version) {
             continueLoad = true;
@@ -66,8 +78,8 @@ function load(loadType) {
         if (continueLoad) {
 
             //Cancel writing the start of the story
-            if (window.startTask) {
-                clearTimeout(window.startTask);
+            if (window.storyTask) {
+                window.storyTask = false;
                 console.log("Loading save - cancelling timeout");
             }
 
@@ -87,11 +99,21 @@ function load(loadType) {
             document.getElementById("cloningProgressBar").style.width = (Math.floor(loadVar.trackers.cloning.counter/loadVar.trackers.cloning.required*100))+"%";
 
             //Write variables
+
+            //main.js
             window.trackers = loadVar.trackers;
             window.resources = loadVar.resources;
             window.purchases = loadVar.purchases;
             window.clones = loadVar.clones;
             window.revealed = loadVar.revealed;
+
+            //exploration.js
+            window.zone = loadVar.zone;
+            window.row = loadVar.row;
+            window.cell = loadVar.cell;
+            window.army = loadVar.army;
+            window.enemy = loadVar.enemy;
+            window.autoFight = loadVar.autoFight;
 
             //Story-based unlocks
             if (loadVar.revealed.metal) {
@@ -113,7 +135,7 @@ function load(loadType) {
 
                             if (loadVar.revealed.science) {
 
-                                document.getElementById("clonesContainer").classList.remove("hidden");
+                                document.getElementById("jobsButton").classList.remove("hidden");
                                 document.getElementById("scienceContainer").classList.remove("hidden");
 
                                 if (loadVar.revealed.cloning) {
@@ -136,6 +158,33 @@ function load(loadType) {
                                                 document.getElementById("explosiveButton").classList.add("hidden");
                                                 document.getElementById("foodContainer").classList.remove("hidden");
                                                 document.getElementById("farmerButton").classList.remove("hidden");
+                                                
+                                                if (loadVar.revealed.plans) {
+
+                                                    document.getElementById("metalButton").innerHTML = "Smelt Metal";
+                                                    document.getElementById("plansButton").classList.remove("hidden");
+                                                    clones.researcher.requires.food = 10;
+
+                                                    if (loadVar.revealed.exploration) {
+
+                                                        document.getElementById("plansButton").classList.add("hidden");
+                                                        document.getElementById("battleContainer").classList.remove("hidden");
+
+                                                        if (loadVar.revealed.miners) {
+
+                                                            document.getElementById("minerButton").classList.remove("hidden");
+                                                            document.getElementById("metalNetContainer").classList.remove("hidden");
+                                                            document.getElementById("minersButton").classList.add("hidden");
+
+                                                            if (loadVar.revealed.scouts) {
+
+                                                                document.getElementById("autofightButton").classList.remove("hidden");
+                                                                document.getElementById("scoutsButton").classList.add("hidden");
+                                                                
+                                                            }
+                                                        }
+                                                    }
+                                                }
                                             }
                                         }
                                     }
@@ -158,6 +207,10 @@ function load(loadType) {
             updateResourceValues();
             updateCloneValues();
             updatePurchaseValues();
+        }
+    } else {
+        if (loadType == "import") {
+            alert("Unfortunately, your save string could not be recognized. It is possible that something is wrong on our end. Try again in a while.");
         }
     }
 }
