@@ -134,6 +134,15 @@ function resetVariables() {
                 metal: 20
             }
         },
+        engineers: {
+            owned: 0,
+            available: 0,
+            benefitType: "upgrade once",
+            requires: {
+                science: 50,
+                metal: 30
+            }
+        },
         speedfarming: {
             owned: 0,
             available: 0,
@@ -207,6 +216,14 @@ function resetVariables() {
             total: 0,
             benefit: 0.2,
             requires: {
+                science: 10
+            }
+        },
+        engineer: {
+            total: 0,
+            benefit: 0.3,
+            requires: {
+                metal: 10,
                 science: 10
             }
         }
@@ -346,6 +363,7 @@ function calculateNetResources() {
     resources.food.net = Math.round((clones.farmer.total * clones.farmer.benefit) * 10) / 10;
     resources.metal.net = Math.round((clones.miner.total * clones.miner.benefit) * 10) / 10;
     resources.science.net = Math.round((clones.researcher.total * clones.researcher.benefit) * 10) / 10;
+    resources.power.net = Math.round((clones.engineer.total * clones.engineer.benefit) * 10) / 10;
 }
 
 /**
@@ -815,6 +833,12 @@ function purchase(item, amount) {
                     document.getElementById("metalNetContainer").classList.remove("hidden");
                     document.getElementById("minersButton").classList.add("hidden");
                     revealed.miners = true;
+                    break;
+
+                case "engineers":
+                    document.getElementById("engineerButton").classList.remove("hidden");
+                    document.getElementById("powerNetContainer").classList.remove("hidden");
+                    document.getElementById("engineersButton").classList.add("hidden");
                     break;
 
                 case "scouts":

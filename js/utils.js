@@ -26,7 +26,10 @@ var STORY = [
     /* 22 */"You've been looking at some of the machines in the room, and one of the Clones thinks that you could make a small explosive that you could detonate next to the door to dislodge it.",
     /* 23 */"With your explosive armed, you all hide behind machines and detonate it. After everything has settled, you go over to the door and open it up. You look at where you are, but all that is outside of the room is forests and mountains. Looking at the outside of the building, you see that there should be more to the building, but the whole planet is absent of buildings and technology, except for your little room. It doesn't look like you're just going to be able to ask someone where you are. Before you do anything else, you're going to need some food.",
     /* 24 */"After a while, you think that you've managed to get your farm doing fairly well. However, it's going to take a lot of food to sustain any more clones that would be working with you. You spot a cave in a mountain that could have metal in it, which would be a better source than taking apart machines that you don't know much about. Now that you have access to a lot more metal, you'll be able to create some rudimentary weapons to fight off the creatures that you have seen nearby. However, before anyone leaves, you'll need to do some planning.",
-    /* 25 */"After working with all of your clones, you think you have figured out how to start to venture out into the rest of the world. You've come up with a system for dividing up areas to explore, with each area being called a Zone. Each Zone will be made up of 100 smaller areas to map out, called Cells. You will go through each Cell one by one until you have mapped out the entire Zone, then you will move on to the next. However, each Cell might have a creature in it that would be a threat to your explorers, so you will have to send them all with weapons."
+    /* 25 */"After working with all of your clones, you think you have figured out how to start to venture out into the rest of the world. You've come up with a system for dividing up areas to explore, with each area being called a Zone. Each Zone will be made up of 100 smaller areas to map out, called Cells. You will go through each Cell one by one until you have mapped out the entire Zone, then you will move on to the next. However, each Cell might have a creature in it that would be a threat to your explorers, so you will have to send them all with weapons.",
+    /* 26 */"Boy, generating all this power is getting tough. Your Clones could probably do it themselves, if you taught them.",
+    /* 27 */"Coordinating the exploration of your army has really lost its appeal. You should get some of your Clones to do it for you!",
+    /* 28 */"You've made a cool mold for the tools that you are using in the mine. With more, your Clones could mine too!"
 ],
 HINTS = [
     /* 0 */"After getting a bunch of scrap metal, you realize that you don't have a lot of space to put it. If you built a storage crate, you could keep some more.",
@@ -76,10 +79,18 @@ TOOLTIPS = {
         info: "Researchers will spend their time thinking, and will produce ",
         info2: " science every second."
     },
+    engineer: {
+        info: "Train one of the Clones in the upkeep of machinery to keep your generator going. Each engineer will produce ",
+        info2: " power every second."
+    },
 
     //Upgrades
 
     //Job upgrades
+
+    engineers: {
+        info: "Make an instruction manual for the generator, so that your Clones can fix it when it breaks."
+    },
 
     miners: {
         info: "Get enough tools made that your clones will be able to find and smelt metal."
@@ -111,13 +122,15 @@ MAP_LOCATIONS = {
     //Drops which follow no pattern/unique drops
     zones: {
         /*  
-            LOCATION SCHEME: [row, cell, iconName, reward, title]
+            LOCATION SCHEME: [row, cell, iconName, reward, story, title]
+
             Reward can only be a resource or upgrade name.
+            If no story should be shown, put undefined.
 
             Zones that contain no special drops can and should be omitted.
         */
 
-        zone0: [[0, 9, "icon-fast-forward", "scouts", "Scouts"], [2, 9, "glyphicon-question-sign", "miners", "Miners"]]
+        zone0: [[0, 4, "glyphicon-wrench", "engineers", 26, "Engineers"], [0, 9, "icon-fast-forward", "scouts", 27, "Scouts"], [2, 9, "glyphicon-question-sign", "miners", 28, "Miners"]]
     },
 
     //Drops that repeat after a certain number of zones

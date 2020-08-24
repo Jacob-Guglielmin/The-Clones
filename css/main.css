@@ -163,16 +163,21 @@ textarea {
 }
 
 #battleTable {
+    table-layout: fixed;
     border-collapse: collapse;
     position: absolute;
     left: 9.5vw;
     top: calc(10.7vh + 10.5px);
+    width: calc(45.5vw - 9.5vw - 1px);
+    height: calc(50vh - (10.7vh + 10.5px) - 1px);
 }
 
 #battleGrid>tr>td {
     text-align: center;
     font-size: 2vh;
     vertical-align: middle;
+    width: 10%;
+    height: 10%;
 }
 
 #right {
@@ -235,7 +240,7 @@ textarea {
     width: auto;
     float: right;
     border: none;
-    padding: none;
+    padding: 0;
     margin-top: 3vh;
 }
 
@@ -313,8 +318,6 @@ textarea {
 .battleCell {
     box-sizing: border-box;
     padding: 0;
-    width: 5vw;
-    height: calc(3.82vh - 1px);
     border: 1.5px solid #EEE;
     background-color: #999;
     color: black;

@@ -157,7 +157,7 @@ function populateGrid() {
  * Adds all glyphicons and rewards to the correct cells in the grid
  */
 function addLocations() {
-    //Add important drops that have a specific location
+    //Add important drops that are unique
     if (MAP_LOCATIONS.zones["zone" + zone]) {
         for (let i = 0; i < MAP_LOCATIONS.zones["zone" + zone].length; i++) {
             let icon = document.createElement("span");
@@ -166,7 +166,7 @@ function addLocations() {
             } else {
                 icon.classList.add("icomoon", MAP_LOCATIONS.zones["zone" + zone][i][2]);
             }
-            icon.title = MAP_LOCATIONS.zones["zone" + zone][i][4];
+            icon.title = MAP_LOCATIONS.zones["zone" + zone][i][5];
             battleGrid.children[MAP_LOCATIONS.zones["zone" + zone][i][0]].children[MAP_LOCATIONS.zones["zone" + zone][i][1]].appendChild(icon);
         }
     }
@@ -222,6 +222,7 @@ function giveRewards() {
                 if (window.purchases.hasOwnProperty(MAP_LOCATIONS.zones["zone" + zone][i][3])) {
                     window.purchases[MAP_LOCATIONS.zones["zone" + zone][i][3]].available++;
                     window.updatePurchaseValues();
+                    window.addStory(MAP_LOCATIONS.zones["zone" + zone][i][4]);
                     rewardGiven = true;
                     break;
                 }

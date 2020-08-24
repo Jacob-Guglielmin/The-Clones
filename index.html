@@ -68,7 +68,7 @@
                                         Max:
                                         <span id="powerMax">100</span>
                                     </td>
-                                    <td class="number">
+                                    <td id="powerNetContainer" class="number hidden">
                                         <span id="powerNet">0.0</span>/s
                                     </td>
                                 </tr>
@@ -182,10 +182,12 @@
                             <button id="farmerButton" class="purchase hidden" onmouseover="tooltip('farmer', event)" onmousemove="tooltip('farmer', event)" onmouseout="tooltip('hide')" onmousedown="hire('farmer', 1)">Farmer<br>0</button>
                             <button id="minerButton" class="purchase hidden" onmouseover="tooltip('miner', event)" onmousemove="tooltip('miner', event)" onmouseout="tooltip('hide')" onmousedown="hire('miner', 1)">Miner<br>0</button>
                             <button id="researcherButton" class="purchase" onmouseover="tooltip('researcher', event)" onmousemove="tooltip('researcher', event)" onmouseout="tooltip('hide')" onmousedown="hire('researcher', 1)">Researcher<br>0</button>
+                            <button id="engineerButton" class="purchase hidden" onmouseover="tooltip('engineer', event)" onmousemove="tooltip('engineer', event)" onmouseout="tooltip('hide')" onmousedown="hire('engineer', 1)">engineer<br>0</button>
                         </div>
                         <div id="upgrades" class="hidden">
                             <button id="escapeButton" class="purchase" onmouseover="tooltip('escape', event)" onmousemove="tooltip('escape', event)" onmouseout="tooltip('hide')" onmousedown="purchase('escape')">Escape</button>
                             <button id="plansButton" class="purchase hidden" onmouseover="tooltip('plans', event)" onmousemove="tooltip('plans', event)" onmouseout="tooltip('hide')" onmousedown="purchase('plans')">Plans</button>
+                            <button id="engineersButton" class="purchase hidden" onmouseover="tooltip('engineers', event)" onmousemove="tooltip('engineers', event)" onmouseout="tooltip('hide')" onmousedown="purchase('engineers')">Engineers</button>
                             <button id="minersButton" class="purchase hidden" onmouseover="tooltip('miners', event)" onmousemove="tooltip('miners', event)" onmouseout="tooltip('hide')" onmousedown="purchase('miners')">Miners</button>
                             <button id="scoutsButton" class="purchase hidden" onmouseover="tooltip('scouts', event)" onmousemove="tooltip('scouts', event)" onmouseout="tooltip('hide')" onmousedown="purchase('scouts')">Scouts</button>
                             <button id="organizationButton" class="purchase" onmouseover="tooltip('organization', event)" onmousemove="tooltip('organization', event)" onmouseout="tooltip('hide')" onmousedown="purchase('organization')">Organization<br>0</button>

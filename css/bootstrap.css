@@ -109,7 +109,6 @@ samp {
   font-family: monospace, monospace;
   font-size: 1em;
 }
-button::-moz-focus-inner,
 input::-moz-focus-inner {
   padding: 0;
   border: 0;
@@ -4837,7 +4836,6 @@ a.thumbnail.active {
 .media,
 .media-body {
   overflow: hidden;
-  zoom: 1;
 }
 .media-body {
   width: 10000px;
