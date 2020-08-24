@@ -19,7 +19,7 @@ function resetVariables() {
         actions: {
             counter: 0,
             //DEVONLY Set to 10
-            required: 3,
+            required: 10,
             actioning: 0,
             canAction: true
         },
@@ -309,7 +309,7 @@ function tick() {
     //Increment the battle counter and process a tick
     battleCounter++;
     //DEVONLY Set to 7
-    if (battleCounter >= 3) {
+    if (battleCounter >= 7) {
         processBattleTick();
         battleCounter = 0;
     }
@@ -572,7 +572,7 @@ function action(waitComplete) {
                     document.getElementById("actionButton").disabled = true;
                     trackers.actions.actioning = 8;
                     //DEVONLY Set to 10
-                    trackers.wait.time = 3;
+                    trackers.wait.time = 10;
                     setTimeout(() => {
                         trackers.wait.waiting = true;
                     }, 200);
