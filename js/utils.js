@@ -134,7 +134,7 @@ MAP_LOCATIONS = {
     },
 
     //Drops that repeat after a certain number of zones
-    consistent: {
+    repeated: {
         //Organization
         organization: {
             start: 0,

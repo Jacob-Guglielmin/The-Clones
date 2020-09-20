@@ -172,16 +172,16 @@ function addLocations() {
     }
 
     //Add important drops that happen every zone
-    for (let dropName in MAP_LOCATIONS.consistent) {
-        if ((MAP_LOCATIONS.consistent[dropName].start) <= zone && ((zone - MAP_LOCATIONS.consistent[dropName].start) % MAP_LOCATIONS.consistent[dropName].repeat) == 0) {
+    for (let dropName in MAP_LOCATIONS.repeated) {
+        if ((MAP_LOCATIONS.repeated[dropName].start) <= zone && ((zone - MAP_LOCATIONS.repeated[dropName].start) % MAP_LOCATIONS.repeated[dropName].repeat) == 0) {
             let icon = document.createElement("span");
-            if (MAP_LOCATIONS.consistent[dropName].icon.includes("glyphicon")) {
-                icon.classList.add("glyphicon", MAP_LOCATIONS.consistent[dropName].icon);
+            if (MAP_LOCATIONS.repeated[dropName].icon.includes("glyphicon")) {
+                icon.classList.add("glyphicon", MAP_LOCATIONS.repeated[dropName].icon);
             } else {
-                icon.classList.add("icomoon", MAP_LOCATIONS.consistent[dropName].icon);
+                icon.classList.add("icomoon", MAP_LOCATIONS.repeated[dropName].icon);
             }
             icon.title = dropName.charAt(0).toUpperCase() + dropName.slice(1);
-            battleGrid.children[MAP_LOCATIONS.consistent[dropName].row].children[MAP_LOCATIONS.consistent[dropName].col].appendChild(icon);
+            battleGrid.children[MAP_LOCATIONS.repeated[dropName].row].children[MAP_LOCATIONS.repeated[dropName].col].appendChild(icon);
         }
     }
 
