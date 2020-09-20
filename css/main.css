@@ -86,32 +86,41 @@ textarea {
     width: 100vw;
 }
 
-#left {
-    top: 10vh;
-    width: 50vw;
-    height: 90vh;
-    float: left;
+#home {
+    margin-left: 1vw;
+    margin-right: 1vw;
+    margin-top: 1.5vh;
+    margin-bottom: 1.5vh;
+    width: 97vw;
+    height: 85.5vh;
+    display: grid;
+    grid-template-rows: 32vh 53.5vh;
+    grid-template-columns: 48.5vw 48.5vw;
+    column-gap: 1vw;
+    row-gap: 1.5vh;
 }
 
 #resourcesContainer {
-    position: relative;
-    left: 3vw;
-    top: 2vh;
-    width: 45.5vw;
-    height: 25.3vh;
+    grid-row: 1 / 2;
+    grid-column: 1 / 2;
 }
 
 #battleContainer {
-    box-sizing: border-box;
-    position: relative;
-    left: 3vw;
-    top: 9.45vh;
-    width: 45.5vw;
-    height: 50vh;
+    display: flex;
+    grid-row: 2 / 3;
+    grid-column: 1 / 2;
     border: 1px solid #EEE;
     background-color: #35372F;
     padding: 5px;
-    margin: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    flex-wrap: wrap;
+}
+
+#healthBarContainer {
+    width: 100%;
+    padding-right: 5px;
+    align-self: flex-start;
 }
 
 #armyContainer {
@@ -136,11 +145,17 @@ textarea {
     width: 0;
 }
 
+#battleContainerBottom {
+    display: flex;
+    align-self: flex-end;
+    width: 100%;
+}
+
 #battleInfoContainer {
-    position: absolute;
+    position: relative;
     box-sizing: border-box;
     width: calc(10vw - 17px);
-    top: calc(10.7vh + 10.5px);
+    height: min-content;
 }
 
 #zoneNumber {
@@ -163,13 +178,13 @@ textarea {
 }
 
 #battleTable {
+    align-self: flex-end;
     table-layout: fixed;
     border-collapse: collapse;
-    position: absolute;
-    left: 9.5vw;
-    top: calc(10.7vh + 10.5px);
-    width: calc(45.5vw - 9.5vw - 1px);
-    height: calc(50vh - (10.7vh + 10.5px) - 1px);
+    position: relative;
+    margin-left: auto;
+    width: calc(48.5vw - (10vw - 17px) - 12px);
+    height: calc(53.5vh - 11vh - 15px);
 }
 
 #battleGrid>tr>td {
@@ -180,21 +195,10 @@ textarea {
     height: 10%;
 }
 
-#right {
-    top: 10vh;
-    width: 50vw;
-    height: 90vh;
-    float: left;
-}
-
 
 #story {
-    position: relative;
-    box-sizing: border-box;
-    margin-left: 1.5vw;
-    top: 1vh;
-    height: 36.7vh;
-    width: calc(45.5vw + 2px);
+    grid-row: 1 / 2;
+    grid-column: 2 / 3;
     border: 1px solid #EEE;
     padding: 10px;
     font-size: 2.5vh;
@@ -202,15 +206,18 @@ textarea {
 }
 
 #purchaseContainer {
-    position: relative;
-    width: 45.5vw;
-    height: 43vh;
+    grid-row: 2 / 3;
+    grid-column: 2 / 3;
     border: 1px solid #EEE;
     background-color: #35372F;
     padding: 0;
     margin: 0;
-    margin-top: 5vh;
-    margin-left: 1.5vw;
+}
+
+#purchaseButtonsContainer {
+    width: 100%;
+    height: calc(100% - 6vh);
+    overflow: auto;
 }
 
 #totalClonesContainer {
@@ -247,6 +254,11 @@ textarea {
 .settingsButton:hover {
     text-decoration: underline;
     border: none;
+}
+
+.buttonTable {
+    border-collapse: separate;
+    border-spacing: 0 0.5vh;
 }
 
 .progressBarOuter {
@@ -376,6 +388,10 @@ textarea {
     float: left;
 }
 
+.purchaseWindow {
+    padding-bottom: 1.1vw;
+}
+
 .number {
     text-align: right;
     padding-right: 20px;
@@ -389,6 +405,7 @@ textarea {
 
 .hidden {
     display: none;
+    visibility: hidden;
 }
 
 .no-select {
